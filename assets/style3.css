@@ -1,0 +1,120 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+/* Header */
+header {
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    padding: 20px 0;
+}
+
+h1 {
+    font-size: 24px;
+    text-align: left;
+    color: #333;
+}
+
+/* Profile Section */
+.profile-section {
+    background-color: #fff;
+    padding: 20px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.profile-container {
+    display: flex;
+    align-items: center;
+}
+
+.profile-image img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.profile-info h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.profile-info p {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #555;
+}
+
+/* Publications Section */
+.publications-section {
+    background-color: #fff;
+    padding: 20px 0;
+}
+
+h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.publication-item {
+    margin-bottom: 15px;
+}
+
+.publication-item h3 {
+    font-size: 18px;
+    color: #333;
+}
+
+.publication-item p {
+    font-size: 16px;
+    color: #555;
+}
+
+.publication-item a {
+    margin-right: 10px;
+    color: #007acc;
+    text-decoration: none;
+}
+
+.publication-item a:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-image {
+        margin-bottom: 15px;
+    }
+
+    .container {
+        width: 90%;
+    }
+}
