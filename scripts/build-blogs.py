@@ -1,0 +1,269 @@
+#!/usr/bin/env python3
+"""Build static HTML blog pages from blogs/*.md (Distill-inspired layout)."""
+
+from __future__ import annotations
+
+import html
+import re
+from datetime import datetime
+from pathlib import Path
+
+import markdown
+import yaml
+
+ROOT = Path(__file__).resolve().parent.parent
+BLOGS_DIR = ROOT / "blogs"
+SITE_ORIGIN = "https://zhehaoli1999.github.io"
+
+MD_EXTENSIONS = [
+    "markdown.extensions.fenced_code",
+    "markdown.extensions.tables",
+    "markdown.extensions.nl2br",
+    "markdown.extensions.sane_lists",
+]
+
+try:
+    import pygments  # noqa: F401
+
+    MD_EXTENSIONS.append("markdown.extensions.codehilite")
+    CODEHILITE_OPTS = {"css_class": "highlight", "guess_lang": False}
+except ImportError:
+    CODEHILITE_OPTS = {}
+
+
+def parse_frontmatter(raw: str) -> tuple[dict, str]:
+    if raw.startswith("---"):
+        end = raw.find("\n---", 3)
+        if end != -1:
+            meta = yaml.safe_load(raw[3:end]) or {}
+            body = raw[end + 4 :].lstrip("\n")
+            return meta, body
+    return {}, raw
+
+
+def slug_from_path(path: Path) -> str:
+    return path.stem
+
+
+def parse_iso_date(slug: str, meta: dict) -> datetime | None:
+    if meta.get("date"):
+        if isinstance(meta["date"], datetime):
+            return meta["date"]
+        text = str(meta["date"])
+        for fmt in ("%Y-%m-%d", "%Y/%m/%d"):
+            try:
+                return datetime.strptime(text[:10], fmt)
+            except ValueError:
+                pass
+        try:
+            return datetime.fromisoformat(text.replace("Z", "+00:00")[:10])
+        except ValueError:
+            return None
+    match = re.match(r"^(\d{4}-\d{2}-\d{2})", slug)
+    if match:
+        return datetime.strptime(match.group(1), "%Y-%m-%d")
+    return None
+
+
+def format_display_date(date_obj: datetime | None, meta: dict) -> str:
+    if meta.get("date") and date_obj is None:
+        return str(meta["date"])
+    if not date_obj:
+        return ""
+    return f"{date_obj.strftime('%B')} {date_obj.day}, {date_obj.year}"
+
+
+def extract_abstract(meta: dict, content: str) -> str:
+    if meta.get("abstract"):
+        return str(meta["abstract"]).strip()
+    if meta.get("description"):
+        return str(meta["description"]).strip()
+    quote = re.search(r"^>\s+(.+)$", content, re.MULTILINE)
+    if quote:
+        return quote.group(1).strip()
+    for line in content.splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and not line.startswith("!"):
+            return line[:220]
+    return ""
+
+
+def indent_html(fragment: str, spaces: int = 6) -> str:
+    pad = " " * spaces
+    return "\n".join(pad + line if line else line for line in fragment.splitlines())
+
+
+def render_article(
+    *,
+    title: str,
+    author: str,
+    date: str,
+    abstract: str,
+    body_html: str,
+    slug: str,
+    lang: str,
+) -> str:
+    asset_root = "../../"
+    canonical = f"{SITE_ORIGIN}/blogs/{slug}/"
+    safe_title = html.escape(title)
+    safe_abstract = html.escape(abstract)
+    lede = f'      <p class="d-lede">{safe_abstract}</p>\n' if abstract else ""
+
+    return f"""<!DOCTYPE html>
+<html lang="{html.escape(lang)}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{safe_title} | Zhehao Li</title>
+  <meta name="description" content="{safe_abstract}">
+  <link rel="icon" type="image/x-icon" href="{asset_root}files/duck_icon.png">
+  <link rel="canonical" href="{canonical}">
+  <link rel="stylesheet" href="{asset_root}assets/blog.css">
+  <script src="{asset_root}assets/theme.js"></script>
+  <script src="https://kit.fontawesome.com/13cb060381.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.10.0/styles/github.min.css">
+</head>
+<body>
+  <header class="d-site-header">
+    <a class="d-brand" href="{asset_root}index.html">Zhehao Li</a>
+    <nav>
+      <a href="{asset_root}index.html">Home</a>
+      <a href="{asset_root}index.html#news">News</a>
+      <a href="{asset_root}index.html#publications">Publications</a>
+      <a href="{asset_root}index.html#service">Service</a>
+      <a class="active" href="{asset_root}blog.html">Blog</a>
+      <button type="button" class="theme-toggle" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+    </nav>
+  </header>
+
+  <article class="d-article">
+    <header>
+      <h1 class="d-title">{safe_title}</h1>
+{lede}      <div class="d-byline">
+        <span><strong>{html.escape(author)}</strong></span>
+        <span>{html.escape(date)}</span>
+      </div>
+    </header>
+    <div class="d-body">
+{body_html}
+    </div>
+  </article>
+
+  <footer class="d-footer">
+    <a href="{asset_root}blog.html">Back to all posts</a>
+  </footer>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {{
+      if (typeof renderMathInElement === "function") {{
+        renderMathInElement(document.body, {{
+          delimiters: [
+            {{ left: "$$", right: "$$", display: true }},
+            {{ left: "$", right: "$", display: false }},
+            {{ left: "\\\\(", right: "\\\\)", display: false }},
+            {{ left: "\\\\[", right: "\\\\]", display: true }},
+          ],
+          throwOnError: false,
+        }});
+      }}
+    }});
+  </script>
+</body>
+</html>
+"""
+
+
+def render_blog_list_item(post: dict) -> str:
+    url = f"blogs/{html.escape(post['slug'])}/index.html"
+    return f"""      <div class="d-flex flex-row pb-3">
+        <div class="d-none d-sm-inline pe-3 pub-thumb">
+          <a href="{url}" target="_self">
+            <img src="{html.escape(post['thumbnail'])}" alt="{html.escape(post['title'])}" class="img-fluid rounded img-thumbnail" width="125px">
+          </a>
+        </div>
+        <div class="d-inline">
+          <h5><a class="title" href="{url}" target="_self">{html.escape(post['title'])}</a></h5>
+          <p>
+            {html.escape(post['abstract'])}
+            <br>
+            <span style="color: #ED7D31">{html.escape(post['date'])}</span>
+          </p>
+        </div>
+      </div>"""
+
+
+def update_index(posts: list[dict]) -> None:
+    index_path = ROOT / "blog.html"
+    content = index_path.read_text(encoding="utf-8")
+    start = "      <!-- BLOG_LIST_START -->"
+    end = "      <!-- BLOG_LIST_END -->"
+    start_idx = content.find(start)
+    end_match = re.search(r"\s*<!-- BLOG_LIST_END -->", content)
+    if start_idx == -1 or not end_match:
+        print("Blog list markers not found in blog.html; skipping blog list update.")
+        return
+    sorted_posts = sorted(posts, key=lambda p: p["date_obj"], reverse=True)
+    items = "\n\n".join(render_blog_list_item(p) for p in sorted_posts)
+    block = f"{start}\n{items}\n{end}"
+    index_path.write_text(
+        content[:start_idx] + block + content[end_match.end() :],
+        encoding="utf-8",
+    )
+
+
+def main() -> None:
+    md_kwargs: dict = {"extensions": MD_EXTENSIONS}
+    if CODEHILITE_OPTS:
+        md_kwargs["extension_configs"] = {"markdown.extensions.codehilite": CODEHILITE_OPTS}
+    md = markdown.Markdown(**md_kwargs)
+
+    posts: list[dict] = []
+    for md_path in sorted(BLOGS_DIR.glob("*.md")):
+        slug = slug_from_path(md_path)
+        raw = md_path.read_text(encoding="utf-8")
+        meta, body = parse_frontmatter(raw)
+        title = str(meta.get("title", slug)).strip()
+        author = str(meta.get("author", "Zhehao Li"))
+        date_obj = parse_iso_date(slug, meta)
+        date = format_display_date(date_obj, meta)
+        abstract = extract_abstract(meta, body)
+        body_html = indent_html(md.convert(body))
+        md.reset()
+        lang = meta.get("lang") or (
+            "zh" if re.search(r"[\u4e00-\u9fff]", title + body) else "en"
+        )
+
+        out_dir = BLOGS_DIR / slug
+        out_dir.mkdir(parents=True, exist_ok=True)
+        article = render_article(
+            title=title,
+            author=author,
+            date=date,
+            abstract=abstract,
+            body_html=body_html,
+            slug=slug,
+            lang=str(lang),
+        )
+        (out_dir / "index.html").write_text(article, encoding="utf-8")
+        print(f"Built blogs/{slug}/index.html")
+
+        posts.append(
+            {
+                "slug": slug,
+                "title": title,
+                "abstract": abstract,
+                "date": date,
+                "date_obj": date_obj or datetime.min,
+                "thumbnail": meta.get("thumbnail", "files/duck_icon.png"),
+            }
+        )
+
+    update_index(posts)
+    print(f"Updated blog.html with {len(posts)} blog(s).")
+
+
+if __name__ == "__main__":
+    main()

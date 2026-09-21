@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="icon" type="image/x-icon" href="files/duck_icon.png">
+  <script src="assets/theme.js"></script>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23662412-4"></script>
@@ -33,14 +34,37 @@
 </head>
 
 <body>
+  <!---------------------------------------------- Top bar ----------------------------------------------------->
+  <nav class="navbar navbar-expand-sm site-nav sticky-top">
+    <div class="container container-small">
+      <a class="navbar-brand" href="index.html" target="_self">Zhehao Li</a>
+      <button type="button" class="theme-toggle ms-auto ms-sm-3 order-sm-last" aria-label="Toggle theme">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#site-nav-links"
+        aria-controls="site-nav-links" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="site-nav-links">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html" target="_self">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#news" target="_self">News</a></li>
+          <li class="nav-item"><a class="nav-link" href="#publications" target="_self">Publications</a></li>
+          <li class="nav-item"><a class="nav-link" href="#service" target="_self">Service</a></li>
+          <li class="nav-item"><a class="nav-link" href="blog.html" target="_self">Blog</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
   <!--------------------------------------------------------------------------------------------------->
   <div class="container container-small mb-5">
     <div class="row pt-4 pb-4 justify-content-center">
 
       <div class="col-3 d-none d-sm-block">
-        <figure class="figure">
-          <img src="files/me_2024.jpg" alt="zhehaoli" class="figure-img rounded img-fluid hover-profile"
-            id="profile-img" width="200px">
+        <figure class="figure profile-frame">
+          <img src="files/me_2024.jpg" alt="Photo of Zhehao Li" title="Click for another photo"
+            class="figure-img rounded img-fluid hover-profile" id="profile-img" width="200px">
           <!--<figcaption class="figure-caption text-center">-->
           <!--Shot in Qinghai province, China.-->
           <!--</figcaption>-->
@@ -62,16 +86,17 @@
 
         <!--<div class="popover-delay">-->
         <div class="mt-3 mb-3">
-          <!-- <a href=""><i class="ai ai-google-scholar ai-2x hover-icon pr-3"></i></a> -->
           <a href="mailto:zhehaoli@stanford.edu"><i class="fas fa-envelope fa-2xl hover-icon"></i></a>&ensp;
+          <a href="https://scholar.google.com/citations?user=e320L-cAAAAJ&amp;hl=en" aria-label="Google Scholar"><i
+              class="ai ai-google-scholar ai-2x hover-icon scholar-icon"></i></a>&ensp;
           <a href="https://github.com/zhehaoli1999"><i class="fa-brands fa-github fa-2xl hover-icon"></i></a>&ensp;
           <a href="https://www.linkedin.com/in/zhehao-li-796a42329/"><i class="fa-brands fa-linkedin fa-2xl hover-icon"></i></a>&ensp;
           <!-- <a href="https://www.zhihu.com/people/li-ji-ji-81-18"><i -->
               <!-- class="fa-brands fa-zhihu fa-2xl hover-icon"></i></a>&ensp; -->
           <a href="https://twitter.com/ZhehaoLi1999"><i class="fa-brands fa-twitter fa-2xl hover-icon"></i></a>&ensp;
           <!--<a href="https://www.linkedin.com/in/shiyang-jia-a4aa6b174/"><i class="fa-brands fa-linkedin fa-2xl hover-icon"></i></a>&ensp;-->
-          <!--<a href="assets/Resume.pdf"><i class="fa-regular fa-file-lines fa-2xl hover-icon"></i></a>--:>
-						</div>
+          <!--<a href="assets/Resume.pdf"><i class="fa-regular fa-file-lines fa-2xl hover-icon"></i></a>-->
+        </div>
 						<!--<div class="mt-1 mb-1">-->
           <!--<a href="/cdn-cgi/l/email-protection#c0b3b9aaa9a1f0f3f2f580a7ada1a9aceea3afad"><i class="fas fa-envelope hover-icon"></i></a> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4f3c3625262e7f7c7d7a0f28222e2623612c2022">[email&#160;protected]</a>-->
           <!--</div>-->
@@ -81,22 +106,27 @@
       </div>
       <div class="row">
         <div class="col-12 text-justify">
-          <p>I am a second-year CS Ph.D. student at Stanford University, advised by <a
-              href="https://graphics.stanford.edu/~djames/">Prof. Doug James</a>. Currently, my research interest lies
-            in animation control and physics-based multimodal (visual-audio) simulation.
+          <p>I am a rising third-year CS Ph.D. student at Stanford University, advised by <a
+              href="https://graphics.stanford.edu/~djames/">Prof. Doug James</a>. I work at the intersection of
+            simulation, graphics, and AI.
             <br>
             <br>
-            I received my M.S. from <a href="http://gcl.ustc.edu.cn">Graphics & Geometric
-              Computing Lab</a> at <a href="https://www.ustc.edu.cn/">
-              University of Science and Technology of China (USTC)</a>
-            , where I was very fortunate to be advised by <a href="http://staff.ustc.edu.cn/~lgliu/">Prof. Ligang
-              Liu</a>.
+            My current research focuses on physics-based simulation and learning.
+            More broadly, I am excited about building intelligent machines at scale that can understand, reason
+            about, and act in the physical world — machines with reasoning grounded in physical knowledge and
+            a thinking process that is traceable and verifiable, and that can ultimately assist people in the real
+            world.
+            <br>
+            <br>
+            I received both my B.E. in CS and my M.S. from the <a href="https://www.ustc.edu.cn/">University of
+              Science and Technology of China (USTC)</a>, where I was very fortunate to be advised by <a
+              href="http://staff.ustc.edu.cn/~lgliu/">Prof. Ligang Liu</a> in the <a
+              href="http://gcl.ustc.edu.cn">Graphics & Geometric Computing Lab</a>.
 
-            I also worked with <a href="http://ren-bo.net/">Prof. Bo Ren</a> at <a
+            I have also worked with <a href="http://ren-bo.net/">Prof. Bo Ren</a> at <a
               href="https://cc.nankai.edu.cn/">Nankai University</a> and
-            <a href="https://taodu-eecs.github.io/">Prof. Tao Du</a> at the<a href="https://iiis.tsinghua.edu.cn/en/">
+            <a href="https://taodu-eecs.github.io/">Prof. Tao Du</a> at the <a href="https://iiis.tsinghua.edu.cn/en/">
               Institute for Interdisciplinary Information Sciences (IIIS), Tsinghua University</a>.
-            I received my B.E. in CS from USTC.
           </p>
 
           <!--<p><b>Past Experiences:</b><br> I received my B.E. in CS with honors-->
@@ -118,10 +148,32 @@
         </div>
       </div>
 
+      <!---------------------------------------------- News ----------------------------------------------------->
+      <hr>
+      <div class="row mb-1" id="news">
+        <h4>News</h4>
+      </div>
+      <ul class="news-list">
+        <li><span class="news-date">Aug 2026</span> <a href="https://stanford-gfxsim.github.io/BubbleGym/">BubbleGym</a> is
+          accepted to <a href="https://asia.siggraph.org/2026/">SIGGRAPH Asia 2026</a>! To appear in Kuala Lumpur,
+          Malaysia, Dec 1–4, 2026.</li>
+        <li><span class="news-date">Jul 2026</span> Serving as a reviewer for <a
+            href="https://dl.acm.org/journal/tog">ACM Transactions on Graphics (TOG)</a>.</li>
+        <li><span class="news-date">Mar 2026</span> Serving as a co-chair of the Stanford CS PhD Admit Weekend.</li>
+        <li><span class="news-date">Sep 2025</span> Serving as a co-chair of the Stanford Graphics Café.</li>
+        <li><span class="news-date">Sep 2025</span> Our paper on <a
+            href="https://www.arxiv.org/abs/2510.27517">learned sparse approximate inverse preconditioners</a> is
+          accepted to NeurIPS 2025!</li>
+      </ul>
+
       <!---------------------------------------------- Publication ----------------------------------------------------->
       <hr>
-      <div class="row mb-1">
-        <h4>Publications</h4>
+      <div class="row mb-1" id="publications">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <h4 class="mb-0" id="pub-heading">Selected Publications</h4>
+          <button type="button" class="btn btn-sm pub-toggle" aria-controls="pub-list" aria-expanded="false">
+            Show all publications</button>
+        </div>
       </div>
 
       <div class="modal fade" id="bibtex-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -142,10 +194,55 @@
         </div>
       </div>
 
-      <!---------------------------------------------- neural preconditioner ----------------------------------------------------->
+      <!-- entries marked pub-extra (not first-authored) are shown only with "Show all publications" -->
+      <div id="pub-list">
+      <!---------------------------------------------- BubbleGym ----------------------------------------------------->
       <div class="d-flex flex-row pb-3">
-        <div class="d-none d-sm-inline pe-3">
-          <img src="files/neural_precon2.png" alt="neural preconditioner" class="img-fluid rounded img-thumbnail" width="125px">
+        <div class="d-none d-sm-inline pe-3 pub-thumb">
+          <img src="files/bubblegym.jpg" alt="BubbleGym" class="img-fluid rounded img-thumbnail" width="125px">
+        </div>
+        <div class="d-inline">
+          <h5><a class="title" href="https://stanford-gfxsim.github.io/BubbleGym/" target="_self">
+              BubbleGym: A Practical Shape-to-Frequency Model for Acoustic Bubbles</a></h5>
+          <p>
+            <b>Zhehao Li</b>,
+            <a class="author" href="https://kuiwuchn.github.io/">Kui Wu</a>,
+            <a class="author" href="https://lwkobe.github.io/">Wei Li</a>,
+            <a class="author" href="https://graphics.stanford.edu/~djames/">Doug L. James</a>
+            <br>
+            <a href="https://asia.siggraph.org/2026/" , style="color: #ED7D31">SIGGRAPH Asia 2026 Conference Papers</a>
+          </p>
+          <a href="https://stanford-gfxsim.github.io/BubbleGym/" target="_self" class="btn btn-sm mb-1"><i
+              class="fa-regular fa-window-restore"></i> Webpage</a>
+          <a href="https://drive.google.com/file/d/1zbNWpLHeS4T3vRF14Bb3kKyYksr4LAya/view?usp=sharing" class="btn btn-sm mb-1">
+            <i class="fa-regular fa-file-lines"></i> Paper</a>
+          <a href="https://github.com/stanford-gfxsim/BubbleGym" class="btn btn-sm mb-1"><i class="fa-brands fa-github"></i>
+            Code</a>
+          <a href="https://doi.org/10.1145/3829340.3842193" class="btn btn-sm mb-1"><i class="ai ai-acmdl"></i>
+            Publisher</a>
+          <button type="button" class="btn btn-sm btn-bibtex mb-1" data-bs-toggle="modal"
+            data-bs-target="#bibtex-modal">
+            <i class="fa-solid fa-paperclip"></i> BibTex
+            <div class="bibtex-content" hidden>@inproceedings{li2026bubblegym,
+              author = {Li, Zhehao and Wu, Kui and Li, Wei and James, Doug L.},
+              title = {BubbleGym: A Practical Shape-to-Frequency Model for Acoustic Bubbles},
+              booktitle = {SIGGRAPH Asia 2026 Conference Papers (SA Conference Papers '26)},
+              year = {2026},
+              location = {Kuala Lumpur, Malaysia},
+              publisher = {Association for Computing Machinery},
+              address = {New York, NY, USA},
+              doi = {10.1145/3829340.3842193},
+              isbn = {979-8-4007-2842-6}
+              }
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!---------------------------------------------- neural preconditioner ----------------------------------------------------->
+      <div class="d-flex flex-row pb-3 pub-extra">
+        <div class="d-none d-sm-inline pe-3 pub-thumb">
+          <img src="files/neural_precon_thumb.png" alt="neural preconditioner" class="img-fluid rounded img-thumbnail thumb-inset" width="125px">
         </div>
         <div class="d-inline">
           <h5><a class="title" href="https://neurips.cc/virtual/2025/loc/san-diego/poster/116429" target="_self">
@@ -192,10 +289,45 @@
         </div>
       </div>
 
+      <!---------------------------------------------- WindDancer ----------------------------------------------------->
+      <div class="d-flex flex-row pb-3 pub-extra">
+        <div class="d-none d-sm-inline pe-3 pub-thumb">
+          <img src="files/winddancer_thumb.png" alt="WindDancer" class="img-fluid rounded img-thumbnail" width="125px">
+        </div>
+        <div class="d-inline">
+          <h5><a class="title" href="https://dl.acm.org/doi/10.1145/3729469" target="_self">
+              WindDancer: Understanding Acoustic Sensing under Ambient Airflow</a></h5>
+          <p>
+            Kuang Yuan, Dong Li, Hao Zhou, <b>Zhehao Li</b>, Lili Qiu,
+            <a class="author" href="https://swarunkumar.com/">Swarun Kumar</a>, Jie Xiong
+            <br>
+            <a href="https://dl.acm.org/journal/imwut" , style="color: #ED7D31">Proceedings of the ACM on Interactive,
+              Mobile, Wearable and Ubiquitous Technologies (IMWUT), 2025</a>
+          </p>
+          <a href="https://dl.acm.org/doi/10.1145/3729469" class="btn btn-sm mb-1"><i class="ai ai-acmdl"></i>
+            Publisher</a>
+          <button type="button" class="btn btn-sm btn-bibtex mb-1" data-bs-toggle="modal"
+            data-bs-target="#bibtex-modal">
+            <i class="fa-solid fa-paperclip"></i> BibTex
+            <div class="bibtex-content" hidden>@article{yuan2025winddancer,
+              author = {Yuan, Kuang and Li, Dong and Zhou, Hao and Li, Zhehao and Qiu, Lili and Kumar, Swarun and Xiong, Jie},
+              title = {WindDancer: Understanding Acoustic Sensing under Ambient Airflow},
+              journal = {Proc. ACM Interact. Mob. Wearable Ubiquitous Technol.},
+              volume = {9},
+              number = {2},
+              year = {2025},
+              month = {June},
+              doi = {10.1145/3729469}
+              }
+            </div>
+          </button>
+        </div>
+      </div>
+
       <!---------------------------------------------- DiffFR ----------------------------------------------------->
       <div class="d-flex flex-row pb-3">
-        <div class="d-none d-sm-inline pe-3">
-          <img src="files/tt.jpeg" alt="DiffFR" class="img-fluid rounded img-thumbnail" width="125px">
+        <div class="d-none d-sm-inline pe-3 pub-thumb">
+          <img src="files/difffr_thumb.png" alt="DiffFR" class="img-fluid rounded img-thumbnail" width="125px">
         </div>
         <div class="d-inline">
           <h5><a class="title" href="https://zhehaoli1999.github.io/DiffFR" target="_self">DiffFR: Differentiable
@@ -247,9 +379,9 @@
         </div>
       </div>
       <!---------------------------------------------- ai coarsen ----------------------------------------------------->
-      <div class="d-flex flex-row pb-3">
-        <div class="d-none d-sm-inline pe-3">
-          <img src="files/neural_coarsen.jpeg" alt="neural coarsen" class="img-fluid rounded img-thumbnail" width="125px">
+      <div class="d-flex flex-row pb-3 pub-extra">
+        <div class="d-none d-sm-inline pe-3 pub-thumb">
+          <img src="files/neural_coarsen_thumb.png" alt="neural coarsen" class="img-fluid rounded img-thumbnail" width="125px">
         </div>
         <div class="d-inline">
           <h5><a class="title" href="https://onlinelibrary.wiley.com/doi/10.1111/cgf.14736" target="_self">
@@ -294,6 +426,19 @@
           </button>
         </div>
       </div>
+      </div>
+
+      <!---------------------------------------------- Service ----------------------------------------------------->
+      <hr>
+      <div class="row mb-1" id="service">
+        <h4>Service</h4>
+      </div>
+      <ul class="service-list">
+        <li>Reviewer, <a href="https://dl.acm.org/journal/tog">ACM Transactions on Graphics (TOG)</a></li>
+        <li>Reviewer, <a href="https://www.siggraph.org/">ACM SIGGRAPH</a></li>
+        <li>Co-chair, Stanford Graphics Café</li>
+        <li>Co-chair, Stanford CS PhD Admission Weekend</li>
+      </ul>
 
       <hr>
       <!--------------------------------------------------------------------------------------------------->
@@ -305,11 +450,11 @@
 
       <footer class="row mb-4">
         <figcaption class="figure-caption text-center">
-          Copyright © 2025 Zhehao Li. Thanks for the template from <a href="https://shiyang-jia.com/">Shiyang
-            Jia</a>.<br>
-          Last update: 11/2025
+          Copyright © 2026 Zhehao Li.<br>
+          Last update: 09/2026
         </figcaption>
       </footer>
+  </div>
 
       <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
       <script src="assets/script.js"></script>

@@ -1,0 +1,15 @@
+{
+  "name": "zhehaoli1999-github-io",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:blogs": "python scripts/build-blogs.py",
+    "build:blogs:node": "node scripts/build-blogs.mjs"
+  },
+  "devDependencies": {
+    "gray-matter": "^4.0.3",
+    "highlight.js": "^11.10.0",
+    "marked": "^12.0.2",
+    "marked-highlight": "^2.1.1"
+  }
+}

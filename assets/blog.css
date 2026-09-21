@@ -1,0 +1,296 @@
+/* Distill-inspired article layout (https://distill.pub) */
+
+:root {
+  --blog-text: #1a1a1a;
+  --blog-muted: #6b6b6b;
+  --blog-border: #e8e8e8;
+  --blog-link: #416b8e;
+  --blog-link-hover: #2d4d66;
+  --blog-code-bg: #f6f8fa;
+  --blog-width: 720px;
+  --blog-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  --blog-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --blog-bg: #fff;
+  --blog-soft: #444;
+  color-scheme: light;
+}
+
+html[data-bs-theme="dark"] {
+  --blog-text: #dee2e6;
+  --blog-muted: #9aa0a6;
+  --blog-border: #3a3f44;
+  --blog-link: #7fb0d8;
+  --blog-link-hover: #a9cbe6;
+  --blog-code-bg: #2b3035;
+  --blog-bg: #212529;
+  --blog-soft: #c4c8cc;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 18px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  color: var(--blog-text);
+  background: var(--blog-bg);
+  font-family: var(--blog-serif);
+  line-height: 1.65;
+}
+
+.d-site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  background: var(--blog-bg);
+  border-bottom: 1px solid var(--blog-border);
+  padding: 0.75rem 1.5rem;
+  font-family: var(--blog-sans);
+  font-size: 0.9rem;
+}
+
+.d-site-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1.25rem;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  color: var(--blog-muted);
+  font-size: 1rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  color: var(--blog-link);
+  background: var(--blog-code-bg);
+}
+
+.d-site-header a {
+  color: var(--blog-muted);
+  text-decoration: none;
+}
+
+.d-site-header a.d-brand {
+  color: var(--blog-text);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.d-site-header a:hover,
+.d-site-header a.active {
+  color: var(--blog-link);
+}
+
+.d-article {
+  max-width: var(--blog-width);
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.d-title {
+  font-size: 2.35rem;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 1rem;
+}
+
+.d-lede {
+  font-size: 1.2rem;
+  line-height: 1.55;
+  color: var(--blog-soft);
+  margin: 0 0 1.75rem;
+}
+
+.d-byline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  font-family: var(--blog-sans);
+  font-size: 0.9rem;
+  color: var(--blog-muted);
+  padding-bottom: 1.75rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--blog-border);
+}
+
+.d-byline strong {
+  color: var(--blog-text);
+  font-weight: 600;
+}
+
+.d-body {
+  font-size: 1.05rem;
+}
+
+.d-body h2 {
+  font-size: 1.55rem;
+  font-weight: 600;
+  margin: 2.25rem 0 0.85rem;
+  letter-spacing: -0.01em;
+}
+
+.d-body h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1.75rem 0 0.65rem;
+}
+
+.d-body h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.d-body p {
+  margin: 0 0 1.1rem;
+}
+
+.d-body a {
+  color: var(--blog-link);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(65, 107, 142, 0.25);
+}
+
+.d-body a:hover {
+  color: var(--blog-link-hover);
+  border-bottom-color: var(--blog-link-hover);
+}
+
+.d-body ul,
+.d-body ol {
+  margin: 0 0 1.1rem;
+  padding-left: 1.4rem;
+}
+
+.d-body li {
+  margin-bottom: 0.35rem;
+}
+
+.d-body blockquote {
+  margin: 1.25rem 0;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 3px solid var(--blog-link);
+  color: var(--blog-soft);
+  font-size: 1.1rem;
+}
+
+.d-body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5rem auto;
+  border-radius: 4px;
+}
+
+.d-body figure {
+  margin: 1.75rem 0;
+}
+
+.d-body figcaption {
+  font-family: var(--blog-sans);
+  font-size: 0.85rem;
+  color: var(--blog-muted);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.d-body pre {
+  font-family: "SF Mono", "Fira Code", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  background: var(--blog-code-bg);
+  border: 1px solid var(--blog-border);
+  border-radius: 6px;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  margin: 1.25rem 0;
+}
+
+.d-body code {
+  font-family: "SF Mono", "Fira Code", Consolas, monospace;
+  font-size: 0.88em;
+  background: var(--blog-code-bg);
+  padding: 0.12em 0.35em;
+  border-radius: 3px;
+}
+
+.d-body pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.d-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: 0.95rem;
+}
+
+.d-body th,
+.d-body td {
+  border: 1px solid var(--blog-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.d-body hr {
+  border: none;
+  border-top: 1px solid var(--blog-border);
+  margin: 2rem 0;
+}
+
+.d-footer {
+  max-width: var(--blog-width);
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+  font-family: var(--blog-sans);
+  font-size: 0.85rem;
+  color: var(--blog-muted);
+  text-align: center;
+}
+
+.d-footer a {
+  color: var(--blog-link);
+  text-decoration: none;
+}
+
+/* KaTeX display */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+
+@media (max-width: 600px) {
+  html {
+    font-size: 17px;
+  }
+
+  .d-title {
+    font-size: 1.85rem;
+  }
+
+  .d-lede {
+    font-size: 1.1rem;
+  }
+}

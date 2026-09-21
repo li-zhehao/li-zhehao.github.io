@@ -107,20 +107,33 @@ h2, h4, h5, h6 {
 .hover-icon:hover {
 	transform:scale(1.2);
 }
+/* line the academicon up with the fa-2xl icons next to it (same offset Font Awesome uses) */
+.scholar-icon {
+  vertical-align: -0.1875em;
+}
 
 .hover-profile {
+  cursor: pointer;
   transition: 0.3s;
 }
 .hover-profile:hover {
   box-shadow: 10px 10px 10px var(--theme-color-hover);
   transform: translate(10px, -10px);
 }
-.rotated {
-  transform: rotateY(180deg);
+.hover-profile.fading {
+  opacity: 0;
 }
-.rotated:hover {
-  box-shadow: -10px 10px 10px var(--theme-color-hover);
-  transform: translate(-10px, -10px) rotateY(180deg);
+/* fixed-size frame so photos of different shapes don't shift the page;
+   each photo keeps its own aspect ratio and is centered vertically */
+.profile-frame {
+  display: flex;
+  align-items: center;
+  width: 200px;
+  max-width: 100%;
+  aspect-ratio: 400 / 502; /* matches the portrait photos */
+}
+.profile-frame img {
+  margin-bottom: 0;
 }
 
 .hover-img {
@@ -177,6 +190,113 @@ pre {
   padding: 1.5em 1.5em;
   border-radius: 0.5em;
 }
+/* top bar */
+.site-nav {
+  background-color: var(--bs-body-bg);
+  border-bottom: 1px solid var(--bs-border-color);
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+}
+.site-nav .navbar-brand {
+  font-weight: bolder;
+  color: inherit;
+}
+.site-nav .navbar-brand:hover {
+  text-decoration: none;
+  color: var(--theme-color);
+}
+.site-nav .nav-link {
+  color: inherit;
+  opacity: 0.7;
+  transition: 0.2s;
+}
+.site-nav .nav-link:hover,
+.site-nav .nav-link.active {
+  text-decoration: none;
+  color: var(--theme-color);
+  opacity: 1;
+}
+.site-nav .navbar-toggler {
+  border: none;
+  color: inherit;
+}
+.site-nav .navbar-toggler:focus {
+  box-shadow: 0 0 0 0.2rem var(--theme-color-focus);
+}
+.theme-toggle {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.1rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  opacity: 0.7;
+  transition: 0.2s;
+}
+.theme-toggle:hover {
+  opacity: 1;
+  color: var(--theme-color);
+  background-color: var(--theme-color-hover);
+}
+.theme-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem var(--theme-color-focus);
+}
+/* brighter accent on dark backgrounds */
+[data-bs-theme="dark"] body {
+  --theme-color: #7FB0D8;
+}
+
+/* keep anchored sections clear of the sticky top bar */
+[id] {
+  scroll-margin-top: 70px;
+}
+
+/* fixed-width thumbnail column so titles line up across entries */
+.pub-thumb {
+  flex: 0 0 180px;
+  max-width: 180px;
+}
+.pub-thumb img {
+  width: 100%;
+  height: auto;
+}
+/* publications: non-first-author entries only appear with "Show all" */
+#pub-list:not(.show-all) .pub-extra {
+  display: none !important;
+}
+
+/* shrink a figure inside its frame without changing the column width */
+.pub-thumb img.thumb-inset {
+  padding: 1rem;
+}
+
+/* bullets start flush with the section heading */
+.service-list,
+.news-list {
+  font-size: 16px;
+  list-style: none;
+  padding-left: 0;
+}
+.service-list li,
+.news-list li {
+  position: relative;
+  padding-left: 1.1em;
+  margin-bottom: 0.3rem;
+}
+.service-list li::before,
+.news-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+}
+.news-date {
+  color: #ED7D31;
+  font-weight: 600;
+  margin-right: 0.3rem;
+}
+
 .bibtex-light {
   background-color: #f5f5f5;
 }

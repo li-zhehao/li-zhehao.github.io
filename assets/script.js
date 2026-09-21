@@ -1,51 +1,25 @@
-const now = new Date();
-const hours = now.getHours();
+// profile photo: click to cycle through photos
+var profilePhotos = ['files/me_2024.jpg', 'files/me_2025a.jpg', 'files/me_2025b.jpg', 'files/me_2025c.jpg'];
+var profileIndex = 0;
 
-//var light = hours > 6 && hours < 19;
-var light = 1;
+profilePhotos.forEach(function(src) { new Image().src = src; });
 
-function lightmode () {
-	$('html').attr('data-bs-theme', 'light');
-	$('#signature').attr('src', 'assets/signature_black.png');
-	$('#teaser-img').attr('src', 'figs/teaser.png');
-	$('.btn').removeClass('btn-outline-light');
-	$('.btn').addClass('btn-outline-dark');
-	$('#bibtex').removeClass('bibtex-dark');
-	$('#bibtex').addClass('bibtex-light');
-  //var rootElement = document.documentElement;
-  //rootElement.style.setProperty('--theme-color', '#416B8E');
-  //document.documentElement = rootElement;
-}
-
-function darkmode () {
-	$('html').attr('data-bs-theme', 'dark');
-	$('#signature').attr('src', 'assets/signature_white.png');
-	$('#teaser-img').attr('src', 'figs/teaser.png');
-	$('.btn').removeClass('btn-outline-dark');
-	$('.btn').addClass('btn-outline-light');
-	$('#bibtex').removeClass('bibtex-light');
-	$('#bibtex').addClass('bibtex-dark');
-  //var rootElement = document.documentElement;
-  //rootElement.style.setProperty('--theme-color', '#43B7F3');
-}
-
-// color mode init
-$(document).ready(function() {
-	if (light) lightmode();
-	else {
-		$('#profile-img').addClass('rotated');
-		darkmode();
-	}
+$('#profile-img').click(function() {
+	var img = $(this);
+	profileIndex = (profileIndex + 1) % profilePhotos.length;
+	img.addClass('fading');
+	setTimeout(function() {
+		img.attr('src', profilePhotos[profileIndex]);
+		img.removeClass('fading');
+	}, 300);
 });
 
-// profile animation
-$('#profile-img').click(function() {
-	$(this).toggleClass('rotated');
-
-	if (light) darkmode();
-	else lightmode();
-
-	light = !light;
+// publications: toggle between first-author (selected) and all papers
+$('.pub-toggle').click(function() {
+	var showAll = $('#pub-list').toggleClass('show-all').hasClass('show-all');
+	$('#pub-heading').text(showAll ? 'All Publications' : 'Selected Publications');
+	$(this).text(showAll ? 'Show selected publications' : 'Show all publications');
+	$(this).attr('aria-expanded', showAll);
 });
 
 // bibtex
