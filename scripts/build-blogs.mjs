@@ -9,7 +9,9 @@ import hljs from "highlight.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const blogsDir = path.join(root, "blogs");
-const siteOrigin = "https://zhehaoli1999.github.io";
+const siteOrigin = "https://zhehaoli1.github.io";
+// categories a post can be tagged with, in the order they appear in the filter bar
+const CATEGORIES = ["paper reading", "thoughts", "technical"];
 
 marked.use(
   markedHighlight({
@@ -77,13 +79,31 @@ function extractAbstract(meta, content) {
   return paragraph ? paragraph.slice(0, 220) : "";
 }
 
-function renderArticleHtml({ title, author, date, abstract, bodyHtml, slug, lang }) {
+function parseTags(meta) {
+  let raw = meta.tags ?? meta.categories ?? meta.category ?? [];
+  if (typeof raw === "string") raw = raw.split(",");
+  const tags = (raw || []).map((t) => String(t).trim().toLowerCase()).filter(Boolean);
+  const unknown = tags.filter((t) => !CATEGORIES.includes(t));
+  for (const t of unknown) {
+    console.warn(`  note: unknown tag "${t}" (known: ${CATEGORIES.join(", ")})`);
+  }
+  return [...CATEGORIES.filter((c) => tags.includes(c)), ...unknown];
+}
+
+function renderTags(tags, cssClass = "tag") {
+  return tags.map((t) => `<span class="${cssClass}">${escapeHtml(t)}</span>`).join("");
+}
+
+function renderArticleHtml({ title, author, date, abstract, bodyHtml, slug, lang, tags }) {
   const assetRoot = "../../";
   const canonical = `${siteOrigin}/blogs/${slug}/`;
   const safeTitle = escapeHtml(title);
   const safeAbstract = abstract ? escapeHtml(abstract) : "";
   const ledeBlock = abstract
     ? `      <p class="d-lede">${safeAbstract}</p>\n`
+    : "";
+  const tagHtml = tags && tags.length
+    ? `\n        <span class="d-tags">${renderTags(tags)}</span>`
     : "";
 
   return `<!DOCTYPE html>
@@ -109,6 +129,7 @@ function renderArticleHtml({ title, author, date, abstract, bodyHtml, slug, lang
       <a href="${assetRoot}index.html#news">News</a>
       <a href="${assetRoot}index.html#publications">Publications</a>
       <a href="${assetRoot}index.html#service">Service</a>
+      <a href="${assetRoot}index.html#teaching">Teaching</a>
       <a class="active" href="${assetRoot}blog.html">Blog</a>
       <button type="button" class="theme-toggle" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
     </nav>
@@ -119,7 +140,7 @@ function renderArticleHtml({ title, author, date, abstract, bodyHtml, slug, lang
       <h1 class="d-title">${safeTitle}</h1>
 ${ledeBlock}      <div class="d-byline">
         <span><strong>${escapeHtml(author)}</strong></span>
-        <span>${escapeHtml(date)}</span>
+        <span>${escapeHtml(date)}</span>${tagHtml}
       </div>
     </header>
     <div class="d-body">
@@ -154,8 +175,9 @@ ${bodyHtml}
 }
 
 function renderBlogListItem(post) {
-  return `      <div class="d-flex flex-row pb-3">
-        <div class="d-none d-sm-inline pe-3 pub-thumb">
+  const tagHtml = post.tags.length ? `\n            ${renderTags(post.tags)}` : "";
+  return `      <div class="d-flex flex-row pb-3 blog-item" data-tags="${escapeHtml(post.tags.join("|"))}">
+        <div class="pe-3 pub-thumb">
           <img src="${escapeHtml(post.thumbnail)}" alt="${escapeHtml(post.title)}" class="img-fluid rounded img-thumbnail" width="125px">
         </div>
         <div class="d-inline">
@@ -163,7 +185,7 @@ function renderBlogListItem(post) {
           <p>
             ${escapeHtml(post.abstract)}
             <br>
-            <span style="color: #ED7D31">${escapeHtml(post.date)}</span>
+            <span style="color: #ED7D31">${escapeHtml(post.date)}</span>${tagHtml}
           </p>
         </div>
       </div>`;
@@ -212,6 +234,7 @@ for (const filePath of markdownFiles) {
   const date = formatDisplayDate(dateObj, meta);
   const abstract = extractAbstract(meta, content);
   const bodyHtml = indentHtml(marked.parse(content));
+  const tags = parseTags(meta);
   const lang =
     meta.lang || (/[\u4e00-\u9fff]/.test(title + content) ? "zh" : "en");
 
@@ -226,6 +249,7 @@ for (const filePath of markdownFiles) {
     bodyHtml,
     slug,
     lang,
+    tags,
   });
 
   fs.writeFileSync(path.join(outDir, "index.html"), html, "utf8");
@@ -237,6 +261,7 @@ for (const filePath of markdownFiles) {
     date,
     dateObj: dateObj || new Date(0),
     thumbnail: meta.thumbnail || "files/duck_icon.png",
+    tags,
   });
 
   console.log(`Built blogs/${slug}/index.html`);

@@ -258,6 +258,16 @@ pre {
   flex: 0 0 180px;
   max-width: 180px;
 }
+/* smaller thumbnails on phones, where they share a narrow row with the text */
+@media (max-width: 576px) {
+  .pub-thumb {
+    flex-basis: 96px;
+    max-width: 96px;
+  }
+  .pub-thumb img.thumb-inset {
+    padding: 0.35rem;
+  }
+}
 .pub-thumb img {
   width: 100%;
   height: auto;
@@ -273,19 +283,69 @@ pre {
 }
 
 /* bullets start flush with the section heading */
+.tldr {
+  font-size: 14px;
+  opacity: 0.85;
+  margin-bottom: 0.5rem;
+}
+
+/* blog categories */
+.blog-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.blog-filters .btn.active {
+  color: var(--bs-body-bg);
+  background-color: var(--theme-color);
+  border-color: var(--theme-color);
+}
+.tag {
+  display: inline-block;
+  margin: 0.15rem 0.3rem 0 0;
+  padding: 1px 8px;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 1em;
+  font-size: 13px;
+  opacity: 0.85;
+}
+.tag:hover {
+  border-color: var(--theme-color);
+  color: var(--theme-color);
+  opacity: 1;
+}
+
+.blog-epigraph {
+  margin: 0 0 1.75rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--theme-color);
+  font-size: 16px;
+  font-style: italic;
+  opacity: 0.85;
+}
+.blog-epigraph footer {
+  margin-top: 0.35rem;
+  font-style: normal;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
 .service-list,
+.teaching-list,
 .news-list {
   font-size: 16px;
   list-style: none;
   padding-left: 0;
 }
 .service-list li,
+.teaching-list li,
 .news-list li {
   position: relative;
   padding-left: 1.1em;
   margin-bottom: 0.3rem;
 }
 .service-list li::before,
+.teaching-list li::before,
 .news-list li::before {
   content: "•";
   position: absolute;

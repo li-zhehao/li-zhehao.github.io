@@ -26,6 +26,8 @@
     integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
     crossorigin="anonymous"></script>
 
+  <script defer src="assets/blog-filter.js"></script>
+
   <title>Blog | Zhehao Li</title>
 </head>
 
@@ -47,6 +49,7 @@
           <li class="nav-item"><a class="nav-link" href="index.html#news">News</a></li>
           <li class="nav-item"><a class="nav-link" href="index.html#publications">Publications</a></li>
           <li class="nav-item"><a class="nav-link" href="index.html#service">Service</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#teaching">Teaching</a></li>
           <li class="nav-item"><a class="nav-link active" aria-current="page" href="blog.html">Blog</a></li>
         </ul>
       </div>
@@ -59,9 +62,22 @@
       <h4>Blog</h4>
     </div>
 
+    <blockquote class="blog-epigraph">
+      Ignorance more frequently begets confidence than does knowledge: it is those who know little, and not those who
+      know much, who so positively assert that this or that problem will never be solved by science.
+      <footer>&mdash; Charles Darwin, <cite>The Descent of Man</cite> (1871)</footer>
+    </blockquote>
+
+    <div class="blog-filters mb-3" id="blog-filters">
+      <button type="button" class="btn btn-sm active" data-filter="all">All</button>
+      <button type="button" class="btn btn-sm" data-filter="paper reading">paper reading</button>
+      <button type="button" class="btn btn-sm" data-filter="thoughts">thoughts</button>
+      <button type="button" class="btn btn-sm" data-filter="technical">technical</button>
+    </div>
+
       <!-- BLOG_LIST_START -->
-      <div class="d-flex flex-row pb-3">
-        <div class="d-none d-sm-inline pe-3 pub-thumb">
+      <div class="d-flex flex-row pb-3 blog-item" data-tags="thoughts">
+        <div class="pe-3 pub-thumb">
           <a href="blogs/2023-06-08-after-sigasia23/index.html" target="_self">
             <img src="files/sa23_logo.png" alt="Stairways to the beyond: Thoughts and reflections of SIGGRAPH Asia 2023" class="img-fluid rounded img-thumbnail" width="125px">
           </a>
@@ -72,6 +88,7 @@
             Seven first-hand lessons from the SIGGRAPH Asia 2023 submission deadline.
             <br>
             <span style="color: #ED7D31">June 8, 2023</span>
+            <span class="tag">thoughts</span>
           </p>
         </div>
       </div>

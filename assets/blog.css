@@ -132,6 +132,15 @@ body {
   border-bottom: 1px solid var(--blog-border);
 }
 
+.d-tags .tag {
+  display: inline-block;
+  margin-right: 0.3rem;
+  padding: 1px 8px;
+  border: 1px solid var(--blog-border);
+  border-radius: 1em;
+  font-size: 0.8rem;
+}
+
 .d-byline strong {
   color: var(--blog-text);
   font-weight: 600;

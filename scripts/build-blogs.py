@@ -13,7 +13,10 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 BLOGS_DIR = ROOT / "blogs"
-SITE_ORIGIN = "https://zhehaoli1999.github.io"
+SITE_ORIGIN = "https://zhehaoli1.github.io"
+
+# categories a post can be tagged with, in the order they appear in the filter bar
+CATEGORIES = ["paper reading", "thoughts", "technical"]
 
 MD_EXTENSIONS = [
     "markdown.extensions.fenced_code",
@@ -88,6 +91,24 @@ def extract_abstract(meta: dict, content: str) -> str:
     return ""
 
 
+def parse_tags(meta: dict) -> list[str]:
+    """Read `tags:` (or `category:`) from the front matter, keeping known ones in order."""
+    raw = meta.get("tags", meta.get("categories", meta.get("category", [])))
+    if isinstance(raw, str):
+        raw = [part.strip() for part in raw.split(",")]
+    tags = [str(t).strip().lower() for t in (raw or []) if str(t).strip()]
+    unknown = [t for t in tags if t not in CATEGORIES]
+    for t in unknown:
+        print(f"  note: unknown tag {t!r} (known: {', '.join(CATEGORIES)})")
+    return [t for t in CATEGORIES if t in tags] + unknown
+
+
+def render_tags(tags: list[str], css_class: str = "tag") -> str:
+    return "".join(
+        f'<span class="{css_class}">{html.escape(t)}</span>' for t in tags
+    )
+
+
 def indent_html(fragment: str, spaces: int = 6) -> str:
     pad = " " * spaces
     return "\n".join(pad + line if line else line for line in fragment.splitlines())
@@ -102,12 +123,14 @@ def render_article(
     body_html: str,
     slug: str,
     lang: str,
+    tags: list[str],
 ) -> str:
     asset_root = "../../"
     canonical = f"{SITE_ORIGIN}/blogs/{slug}/"
     safe_title = html.escape(title)
     safe_abstract = html.escape(abstract)
     lede = f'      <p class="d-lede">{safe_abstract}</p>\n' if abstract else ""
+    tag_html = f"\n        <span class=\"d-tags\">{render_tags(tags)}</span>" if tags else ""
 
     return f"""<!DOCTYPE html>
 <html lang="{html.escape(lang)}">
@@ -132,6 +155,7 @@ def render_article(
       <a href="{asset_root}index.html#news">News</a>
       <a href="{asset_root}index.html#publications">Publications</a>
       <a href="{asset_root}index.html#service">Service</a>
+      <a href="{asset_root}index.html#teaching">Teaching</a>
       <a class="active" href="{asset_root}blog.html">Blog</a>
       <button type="button" class="theme-toggle" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
     </nav>
@@ -142,7 +166,7 @@ def render_article(
       <h1 class="d-title">{safe_title}</h1>
 {lede}      <div class="d-byline">
         <span><strong>{html.escape(author)}</strong></span>
-        <span>{html.escape(date)}</span>
+        <span>{html.escape(date)}</span>{tag_html}
       </div>
     </header>
     <div class="d-body">
@@ -178,8 +202,11 @@ def render_article(
 
 def render_blog_list_item(post: dict) -> str:
     url = f"blogs/{html.escape(post['slug'])}/index.html"
-    return f"""      <div class="d-flex flex-row pb-3">
-        <div class="d-none d-sm-inline pe-3 pub-thumb">
+    tags = post["tags"]
+    tag_attr = html.escape("|".join(tags))
+    tag_html = f'\n            {render_tags(tags)}' if tags else ""
+    return f"""      <div class="d-flex flex-row pb-3 blog-item" data-tags="{tag_attr}">
+        <div class="pe-3 pub-thumb">
           <a href="{url}" target="_self">
             <img src="{html.escape(post['thumbnail'])}" alt="{html.escape(post['title'])}" class="img-fluid rounded img-thumbnail" width="125px">
           </a>
@@ -189,7 +216,7 @@ def render_blog_list_item(post: dict) -> str:
           <p>
             {html.escape(post['abstract'])}
             <br>
-            <span style="color: #ED7D31">{html.escape(post['date'])}</span>
+            <span style="color: #ED7D31">{html.escape(post['date'])}</span>{tag_html}
           </p>
         </div>
       </div>"""
@@ -230,6 +257,7 @@ def main() -> None:
         date_obj = parse_iso_date(slug, meta)
         date = format_display_date(date_obj, meta)
         abstract = extract_abstract(meta, body)
+        tags = parse_tags(meta)
         body_html = indent_html(md.convert(body))
         md.reset()
         lang = meta.get("lang") or (
@@ -246,6 +274,7 @@ def main() -> None:
             body_html=body_html,
             slug=slug,
             lang=str(lang),
+            tags=tags,
         )
         (out_dir / "index.html").write_text(article, encoding="utf-8")
         print(f"Built blogs/{slug}/index.html")
@@ -258,6 +287,7 @@ def main() -> None:
                 "date": date,
                 "date_obj": date_obj or datetime.min,
                 "thumbnail": meta.get("thumbnail", "files/duck_icon.png"),
+                "tags": tags,
             }
         )
 
