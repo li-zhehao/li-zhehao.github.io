@@ -13,7 +13,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 BLOGS_DIR = ROOT / "blogs"
-SITE_ORIGIN = "https://zhehaoli1.github.io"
+SITE_ORIGIN = "https://li-zhehao.github.io"
 
 # categories a post can be tagged with, in the order they appear in the filter bar
 CATEGORIES = ["paper reading", "thoughts", "technical"]

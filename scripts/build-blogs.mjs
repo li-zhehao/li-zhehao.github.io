@@ -9,7 +9,7 @@ import hljs from "highlight.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const blogsDir = path.join(root, "blogs");
-const siteOrigin = "https://zhehaoli1.github.io";
+const siteOrigin = "https://li-zhehao.github.io";
 // categories a post can be tagged with, in the order they appear in the filter bar
 const CATEGORIES = ["paper reading", "thoughts", "technical"];
 
