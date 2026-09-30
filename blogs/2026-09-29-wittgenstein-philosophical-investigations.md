@@ -2,6 +2,7 @@
 title: "Reading notes: Wittgenstein, Philosophical Investigations"
 date: 2026-09-29
 description: "Two lines I keep coming back to: on writing that provokes thought, and on formulating a problem correctly."
+thumbnail: files/wittgenstein_pi.jpg
 tags: [thoughts]
 ---
 
