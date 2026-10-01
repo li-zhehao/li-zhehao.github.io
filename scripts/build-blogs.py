@@ -18,6 +18,11 @@ SITE_ORIGIN = "https://li-zhehao.github.io"
 # categories a post can be tagged with, in the order they appear in the filter bar
 CATEGORIES = ["paper reading", "thoughts", "technical"]
 
+# sections of the blog page, in display order; a post picks one with `section:`
+SECTIONS = ["Academic & Tech", "Reading Notes", "Miscellaneous"]
+# fallback when a post does not name a section: first matching tag wins
+SECTION_BY_TAG = {"technical": "Academic & Tech", "paper reading": "Reading Notes"}
+
 MD_EXTENSIONS = [
     "markdown.extensions.fenced_code",
     "markdown.extensions.tables",
@@ -101,6 +106,20 @@ def parse_tags(meta: dict) -> list[str]:
     for t in unknown:
         print(f"  note: unknown tag {t!r} (known: {', '.join(CATEGORIES)})")
     return [t for t in CATEGORIES if t in tags] + unknown
+
+
+def parse_section(meta: dict, tags: list[str]) -> str:
+    """Read `section:` from the front matter, else infer one from the tags."""
+    raw = str(meta.get("section", "")).strip()
+    if raw:
+        for s in SECTIONS:
+            if raw.lower() == s.lower():
+                return s
+        print(f"  note: unknown section {raw!r} (known: {', '.join(SECTIONS)})")
+    for tag in tags:
+        if tag in SECTION_BY_TAG:
+            return SECTION_BY_TAG[tag]
+    return SECTIONS[-1]
 
 
 def render_tags(tags: list[str], css_class: str = "tag") -> str:
@@ -205,7 +224,7 @@ def render_blog_list_item(post: dict) -> str:
     tags = post["tags"]
     tag_attr = html.escape("|".join(tags))
     tag_html = f'\n            {render_tags(tags)}' if tags else ""
-    return f"""      <div class="d-flex flex-row pb-3 blog-item" data-tags="{tag_attr}">
+    return f"""      <div class="d-flex flex-row pb-3 blog-item" data-tags="{tag_attr}" data-section="{html.escape(post['section'])}">
         <div class="pe-3 pub-thumb">
           <a href="{url}" target="_self">
             <img src="{html.escape(post['thumbnail'])}" alt="{html.escape(post['title'])}" class="img-fluid rounded img-thumbnail" width="125px">
@@ -233,8 +252,17 @@ def update_index(posts: list[dict]) -> None:
         print("Blog list markers not found in blog.html; skipping blog list update.")
         return
     sorted_posts = sorted(posts, key=lambda p: p["date_obj"], reverse=True)
-    items = "\n\n".join(render_blog_list_item(p) for p in sorted_posts)
-    block = f"{start}\n{items}\n{end}"
+    groups = []
+    for section in SECTIONS:
+        in_section = [p for p in sorted_posts if p["section"] == section]
+        if not in_section:
+            continue
+        heading = (
+            f'      <h5 class="blog-section" data-section="{html.escape(section)}">'
+            f"{html.escape(section)}</h5>"
+        )
+        groups.append("\n\n".join([heading] + [render_blog_list_item(p) for p in in_section]))
+    block = f"{start}\n" + "\n\n".join(groups) + f"\n{end}"
     index_path.write_text(
         content[:start_idx] + block + content[end_match.end() :],
         encoding="utf-8",
@@ -288,6 +316,7 @@ def main() -> None:
                 "date_obj": date_obj or datetime.min,
                 "thumbnail": meta.get("thumbnail", "files/duck_icon.png"),
                 "tags": tags,
+                "section": parse_section(meta, tags),
             }
         )
 

@@ -4,6 +4,7 @@ date: 2026-09-25
 description: "Eigenanalysis over a whole family of shapes at once, with a neural field that makes it differentiable with respect to shape."
 thumbnail: files/shape_space_spectra_thumb.jpg
 tags: [paper reading]
+section: Academic & Tech
 ---
 
 ![Reduced-space simulation of hundreds of shapes from a single trained model](../../files/shape_space_spectra.jpg)

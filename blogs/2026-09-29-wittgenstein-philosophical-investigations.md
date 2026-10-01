@@ -4,6 +4,7 @@ date: 2026-09-29
 description: "Two lines I keep coming back to: on writing that provokes thought, and on formulating a problem correctly."
 thumbnail: files/wittgenstein_pi.jpg
 tags: [thoughts]
+section: Reading Notes
 ---
 
 Notes collected while reading Ludwig Wittgenstein's *Philosophical Investigations*, and a commentary on it.

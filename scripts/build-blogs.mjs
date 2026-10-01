@@ -12,6 +12,9 @@ const blogsDir = path.join(root, "blogs");
 const siteOrigin = "https://li-zhehao.github.io";
 // categories a post can be tagged with, in the order they appear in the filter bar
 const CATEGORIES = ["paper reading", "thoughts", "technical"];
+// sections of the blog page, in display order; a post picks one with `section:`
+const SECTIONS = ["Academic & Tech", "Reading Notes", "Miscellaneous"];
+const SECTION_BY_TAG = { technical: "Academic & Tech", "paper reading": "Reading Notes" };
 
 marked.use(
   markedHighlight({
@@ -88,6 +91,17 @@ function parseTags(meta) {
     console.warn(`  note: unknown tag "${t}" (known: ${CATEGORIES.join(", ")})`);
   }
   return [...CATEGORIES.filter((c) => tags.includes(c)), ...unknown];
+}
+
+function parseSection(meta, tags) {
+  const raw = String(meta.section || "").trim();
+  if (raw) {
+    const hit = SECTIONS.find((s) => s.toLowerCase() === raw.toLowerCase());
+    if (hit) return hit;
+    console.warn(`  note: unknown section "${raw}" (known: ${SECTIONS.join(", ")})`);
+  }
+  const tag = tags.find((t) => SECTION_BY_TAG[t]);
+  return tag ? SECTION_BY_TAG[tag] : SECTIONS[SECTIONS.length - 1];
 }
 
 function renderTags(tags, cssClass = "tag") {
@@ -176,7 +190,7 @@ ${bodyHtml}
 
 function renderBlogListItem(post) {
   const tagHtml = post.tags.length ? `\n            ${renderTags(post.tags)}` : "";
-  return `      <div class="d-flex flex-row pb-3 blog-item" data-tags="${escapeHtml(post.tags.join("|"))}">
+  return `      <div class="d-flex flex-row pb-3 blog-item" data-tags="${escapeHtml(post.tags.join("|"))}" data-section="${escapeHtml(post.section)}">
         <div class="pe-3 pub-thumb">
           <img src="${escapeHtml(post.thumbnail)}" alt="${escapeHtml(post.title)}" class="img-fluid rounded img-thumbnail" width="125px">
         </div>
@@ -203,8 +217,13 @@ function updateIndex(posts) {
     return;
   }
   const sorted = [...posts].sort((a, b) => b.dateObj - a.dateObj);
-  const items = sorted.map(renderBlogListItem).join("\n\n");
-  const block = `${start}\n${items}\n      ${end}`;
+  const groups = SECTIONS.map((section) => {
+    const inSection = sorted.filter((p) => p.section === section);
+    if (!inSection.length) return null;
+    const heading = `      <h5 class="blog-section" data-section="${escapeHtml(section)}">${escapeHtml(section)}</h5>`;
+    return [heading, ...inSection.map(renderBlogListItem)].join("\n\n");
+  }).filter(Boolean);
+  const block = `${start}\n${groups.join("\n\n")}\n      ${end}`;
   html = html.slice(0, startIdx) + block + html.slice(endIdx + end.length);
   fs.writeFileSync(indexPath, html);
 }
@@ -235,6 +254,7 @@ for (const filePath of markdownFiles) {
   const abstract = extractAbstract(meta, content);
   const bodyHtml = indentHtml(marked.parse(content));
   const tags = parseTags(meta);
+  const section = parseSection(meta, tags);
   const lang =
     meta.lang || (/[\u4e00-\u9fff]/.test(title + content) ? "zh" : "en");
 
@@ -262,6 +282,7 @@ for (const filePath of markdownFiles) {
     dateObj: dateObj || new Date(0),
     thumbnail: meta.thumbnail || "files/duck_icon.png",
     tags,
+    section,
   });
 
   console.log(`Built blogs/${slug}/index.html`);

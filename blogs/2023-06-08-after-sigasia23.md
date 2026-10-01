@@ -4,6 +4,7 @@ date: 2023-06-08
 description: "Seven first-hand lessons from the SIGGRAPH Asia 2023 submission deadline."
 thumbnail: files/sa23_logo.png
 tags: [thoughts]
+section: Academic & Tech
 ---
 
 As the deadline of SIGGRAPH Asia 2023 has already passed for two weeks, I feel the need for some valuable summaries and first-handed reflections. Here are some of them.  

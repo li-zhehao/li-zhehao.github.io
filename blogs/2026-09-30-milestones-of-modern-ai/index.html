@@ -38,8 +38,8 @@
       </div>
     </header>
     <div class="d-body">
-      <p>A running list of the papers I keep coming back to when explaining how today's models got here. Time runs left to right; the y axis is either the size of each paper's flagship model or how often the paper has been cited, both on a logarithmic scale. Blue is language, green is vision, orange is robotics. <strong>Hover a dot</strong> (or tap it on a phone) to see what the paper did and why it mattered; click to pin it.</p>
-      <div class="tlw" id="ai-timeline"><div class="tlw-head"><div class="tlw-legend"><span class="tlw-key"><i class="tlw-dot-lang"></i>Language</span><span class="tlw-key"><i class="tlw-dot-vis"></i>Vision</span><span class="tlw-key"><i class="tlw-dot-rob"></i>Robotics</span></div><label class="tlw-toggle">y axis: <select id="tlw-yaxis"><option value="p">model size</option><option value="c">citations</option></select></label></div><div class="tlw-scroll"><div class="tlw-track" id="tlw-track"></div></div><div class="tlw-panel" id="tlw-panel"><p class="tlw-hint">Hover or tap a dot to read about the paper.</p></div></div>
+      <p>A hall of fame of seminal papers that shaped the modern AI landscape; a personal running list. Time runs left to right; the y axis is either the size of each paper's flagship model or how often the paper has been cited, both on a logarithmic scale. Blue is language models, green is vision, orange is robotics. <strong>Hover a dot</strong> (or tap it on a phone) to see what the paper did and why it mattered; click to pin it.</p>
+      <div class="tlw" id="ai-timeline"><div class="tlw-head"><div class="tlw-legend"><span class="tlw-key"><i class="tlw-dot-lang"></i>Language Model</span><span class="tlw-key"><i class="tlw-dot-vis"></i>Vision</span><span class="tlw-key"><i class="tlw-dot-rob"></i>Robotics</span></div><label class="tlw-toggle">y axis: <select id="tlw-yaxis"><option value="p">model size</option><option value="c">citations</option></select></label></div><div class="tlw-scroll"><div class="tlw-track" id="tlw-track"></div></div><div class="tlw-panel" id="tlw-panel"><p class="tlw-hint">Hover or tap a dot to read about the paper.</p></div></div>
 
       <style>
       /* the plot breaks out of the 720px text column so it fits without sideways scrolling */
@@ -61,25 +61,51 @@
       .tlw-tick{position:absolute;bottom:-20px;transform:translateX(-50%);color:var(--blog-muted);font-size:.72rem}
       .tlw-tick::before{content:"";position:absolute;left:50%;bottom:16px;width:1px;height:7px;background:var(--blog-border)}
       .tlw-ylab{position:absolute;left:2px;top:-2px;color:var(--blog-muted);font-size:.7rem}
-      .tlw-item{position:absolute;transform:translate(-50%,50%);background:none;border:0;padding:0;cursor:pointer;color:inherit;line-height:0}
-      .tlw-label{position:absolute;left:50%;bottom:11px;transform:translateX(-50%);font-size:.7rem;line-height:1.2;white-space:nowrap;color:var(--blog-muted);transition:color .15s;pointer-events:none}
-      .tlw-item.lab-below .tlw-label{bottom:auto;top:11px}
-      .tlw-item.lab-hidden .tlw-label{display:none}
+      /* the dot: a generous 26px hit area with a small visible mark in the middle */
+      .tlw-item{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;display:flex;align-items:center;justify-content:center;background:none;border:0;padding:0;cursor:pointer;color:inherit}
       .tlw-mark{display:block;width:12px;height:12px;border-radius:50%;border:2px solid var(--blog-bg);transition:transform .15s}
       .tlw-item[data-area="lang"] .tlw-mark{background:#4a7fb5}
       .tlw-item[data-area="vis"] .tlw-mark{background:#3f9f72}
       .tlw-item[data-area="rob"] .tlw-mark{background:#d98032}
-      .tlw-item:hover,.tlw-item.is-active{z-index:3}
+      .tlw-item:hover,.tlw-item.is-active{z-index:4}
       .tlw-item:hover .tlw-mark,.tlw-item:focus-visible .tlw-mark,.tlw-item.is-active .tlw-mark{transform:scale(1.5)}
-      .tlw-item:hover .tlw-label,.tlw-item:focus-visible .tlw-label,.tlw-item.is-active .tlw-label{display:block;color:var(--blog-text);font-weight:600}
       .tlw-item:focus-visible{outline:none}
-      .tlw-panel{min-height:138px;border:1px solid var(--blog-border);border-radius:8px;padding:.9rem 1.1rem;background:var(--blog-code-bg)}
-      .tlw-panel h4{margin:0 0 .15rem;font-size:1rem}
-      .tlw-panel .tlw-meta{color:var(--blog-muted);margin:0 0 .55rem;font-size:.8rem}
-      .tlw-panel .tlw-dim{opacity:.75}
-      .tlw-panel p{margin:0 0 .45rem;line-height:1.5}
-      .tlw-panel .tlw-hint{color:var(--blog-muted);margin:0}
-      .tlw-panel a{color:var(--blog-link)}
+      /* labels are placed separately, each in the first free spot near its dot */
+      .tlw-lab{position:absolute;transform:translate(-50%,-50%);font-size:.7rem;line-height:1.15;white-space:nowrap;color:var(--blog-muted);cursor:pointer;transition:color .15s}
+      .tlw-lab:hover,.tlw-lab.is-active{color:var(--blog-text);font-weight:600;z-index:4}
+      .tlw-item:hover + .tlw-lab{color:var(--blog-text)}
+      /* the panel reads as a card: figure on top, then title and notes */
+      .tlw-panel{overflow:hidden;min-height:170px;border:1px solid var(--blog-border);border-radius:10px;background:var(--blog-code-bg)}
+      .tlw-fig{display:block;width:100%;height:168px;object-fit:cover;object-position:center top;background:#fff;border-bottom:1px solid var(--blog-border)}
+      .tlw-body{padding:.85rem 1.1rem 1rem}
+      .tlw-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:0 0 .35rem;color:var(--blog-muted);font-size:.78rem}
+      .tlw-meta .sep{opacity:.5}
+      .tlw-mdot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+      .tlw-panel h4{margin:0 0 .2rem;font-size:1.15rem;font-weight:600;letter-spacing:-.01em}
+      .tlw-panel h4 a{color:inherit;text-decoration:none}
+      .tlw-panel h4 a:hover{color:var(--blog-link)}
+      .tlw-sub{margin:0 0 .7rem;color:var(--blog-muted);font-size:.9rem;line-height:1.4}
+      .tlw-lbl{margin:.7rem 0 .2rem;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blog-muted)}
+      .tlw-panel p{margin:0;line-height:1.5}
+      .tlw-hint{padding:1.1rem;color:var(--blog-muted);margin:0}
+      @media (max-width:600px){.tlw-fig{height:130px}}
+      /* floating card that follows the pointer (hover devices); the panel above is the touch fallback */
+      .tlw-peek{position:fixed;z-index:50;width:min(420px,calc(100vw - 32px));max-height:min(78vh,680px);
+        display:flex;flex-direction:column;background:var(--blog-bg);color:var(--blog-text);
+        border:1px solid var(--blog-border);border-radius:12px;box-shadow:0 14px 40px rgba(10,20,16,.22);overflow:hidden}
+      .tlw-peek[hidden]{display:none}
+      .tlw-peek .pk-fig{background:#fff;display:flex;align-items:center;justify-content:center;max-height:220px}
+      .tlw-peek .pk-fig img{display:block;max-width:100%;max-height:220px;object-fit:contain}
+      .tlw-peek .pk-body{padding:12px 14px 14px;display:grid;gap:6px;overflow-y:auto;min-height:0}
+      .tlw-peek .pk-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:12px ui-monospace,Consolas,monospace;color:var(--blog-muted)}
+      .tlw-peek .pk-meta i{width:8px;height:8px;border-radius:50%;display:inline-block}
+      .tlw-peek h4{margin:0;font-size:16px;line-height:1.3;font-weight:600}
+      .tlw-peek .pk-sum{margin:0;font-size:13.5px;color:var(--blog-muted)}
+      .tlw-peek .pk-lbl{font:500 11px ui-monospace,Consolas,monospace;letter-spacing:.07em;text-transform:uppercase;color:var(--blog-muted);margin-top:4px}
+      .tlw-peek .pk-txt{margin:0;font-size:13.5px;line-height:1.55}
+      .tlw-peek .pk-open{font-size:13.5px;font-weight:600;color:var(--blog-link);text-decoration:none}
+      @media (hover:hover){.tlw-panel{display:none}}
+      @media (hover:none){.tlw-peek{display:none}}
       .tlw-note{color:var(--blog-muted);font-size:.78rem;margin:.5rem 0 0}
       @media (max-width:600px){.tlw-track{height:380px;padding-left:44px}.tlw-plot{left:44px}.tlw-grid span{left:-44px;width:38px}.tlw-label{font-size:.66rem}}
       </style>
@@ -88,110 +114,110 @@
       (function(){
         var M=1e6,B=1e9;
         var DATA=[
-          {n:"ResNet",f:"Deep Residual Learning for Image Recognition",d:"2015-12",a:"vis",u:"https://arxiv.org/abs/1512.03385",p:60*M,pm:"ResNet-152; the paper reports FLOPs, not parameters",c:240397,
+          {n:"ResNet",f:"Deep Residual Learning for Image Recognition",d:"2015-12",a:"vis",u:"https://arxiv.org/abs/1512.03385",g:"resnet.jpg",p:60*M,pm:"ResNet-152; the paper reports FLOPs, not parameters",c:240397,
            w:"Residual connections let very deep networks train stably.",
            y:"The skip connection is still inside every transformer block."},
-          {n:"Diffusion (2015)",f:"Deep Unsupervised Learning using Nonequilibrium Thermodynamics",d:"2015-03",a:"vis",u:"https://arxiv.org/abs/1503.03585",p:0,pm:"",c:10792,
+          {n:"Diffusion (2015)",f:"Deep Unsupervised Learning using Nonequilibrium Thermodynamics",d:"2015-03",a:"vis",u:"https://arxiv.org/abs/1503.03585",g:"diffusion-2015.jpg",p:0,pm:"",c:10792,
            w:"Destroys data with a slow forward diffusion process, then learns to reverse it step by step.",
            y:"The original diffusion model. Five years ahead of its time: DDPM is this idea made to work at scale."},
-          {n:"Transformer",f:"Attention Is All You Need",d:"2017-06",a:"lang",u:"https://arxiv.org/abs/1706.03762",p:213*M,pm:"Transformer (big); base is 65M",c:194564,
+          {n:"Transformer",f:"Attention Is All You Need",d:"2017-06",a:"lang",u:"https://arxiv.org/abs/1706.03762",g:"transformer.jpg",p:213*M,pm:"Transformer (big); base is 65M",c:194564,
            w:"Drops recurrence and convolution entirely: a stack of self-attention and feed-forward layers, trained in parallel across all positions.",
            y:"The architecture almost every model here is built from. Parallel training is what made scaling to billions of parameters practical."},
-          {n:"BERT",f:"BERT: Pre-training of Deep Bidirectional Transformers",d:"2018-10",a:"lang",u:"https://arxiv.org/abs/1810.04805",p:340*M,pm:"BERT-large",c:121693,
+          {n:"BERT",f:"BERT: Pre-training of Deep Bidirectional Transformers",d:"2018-10",a:"lang",u:"https://arxiv.org/abs/1810.04805",g:"bert.jpg",p:340*M,pm:"BERT-large",c:121693,
            w:"Masked-token pretraining with a bidirectional encoder.",
            y:"Made pretrain-then-finetune the standard for NLP, and still shapes encoder design."},
           {n:"GPT-2",f:"Language Models are Unsupervised Multitask Learners",d:"2019-02",a:"lang",u:"https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf",p:1542*M,pm:"largest of four sizes",c:30391,
            w:"A 1.5B-parameter decoder trained only to predict the next word on web text, then evaluated on tasks it never saw in training.",
            y:"First convincing evidence of zero-shot transfer: translation, summarisation and QA emerge from plain next-token prediction, with no task-specific heads."},
-          {n:"Scaling laws",f:"Scaling Laws for Neural Language Models",d:"2020-01",a:"lang",u:"https://arxiv.org/abs/2001.08361",p:0,pm:"a sweep up to 1.5B non-embedding parameters",c:9151,
+          {n:"Scaling laws",f:"Scaling Laws for Neural Language Models",d:"2020-01",a:"lang",u:"https://arxiv.org/abs/2001.08361",g:"scaling-laws.jpg",p:0,pm:"a sweep up to 1.5B non-embedding parameters",c:9151,
            w:"Loss falls as a power law in parameters, data and compute.",
            y:"Turned model building into a budgeting problem with predictable returns."},
-          {n:"NeRF",f:"NeRF: Representing Scenes as Neural Radiance Fields",d:"2020-03",a:"vis",u:"https://arxiv.org/abs/2003.08934",p:1.2*M,pm:"per-scene MLP, derived from the paper's “5 MB of weights”",c:5513,
+          {n:"NeRF",f:"NeRF: Representing Scenes as Neural Radiance Fields",d:"2020-03",a:"vis",u:"https://arxiv.org/abs/2003.08934",g:"nerf.jpg",p:1.2*M,pm:"per-scene MLP, derived from the paper's “5 MB of weights”",c:5513,
            w:"Fits a volumetric radiance field to posed images, one small MLP per scene.",
            y:"Started the neural-field line of work in 3D vision and graphics."},
-          {n:"GPT-3",f:"Language Models are Few-Shot Learners",d:"2020-05",a:"lang",u:"https://arxiv.org/abs/2005.14165",p:175*B,pm:"GPT-3 175B",c:63952,
+          {n:"GPT-3",f:"Language Models are Few-Shot Learners",d:"2020-05",a:"lang",u:"https://arxiv.org/abs/2005.14165",g:"gpt-3.jpg",p:175*B,pm:"GPT-3 175B",c:63952,
            w:"Scales the same recipe to 175B parameters and shows that examples placed in the prompt can replace fine-tuning.",
            y:"Turned in-context learning into the default interface for using a model, and made scale itself a research agenda."},
-          {n:"DDPM",f:"Denoising Diffusion Probabilistic Models",d:"2020-06",a:"vis",u:"https://arxiv.org/abs/2006.11239",p:114*M,pm:"LSUN / CelebA-HQ 256² U-Net; the CIFAR-10 model is 35.7M",c:35580,
+          {n:"DDPM",f:"Denoising Diffusion Probabilistic Models",d:"2020-06",a:"vis",u:"https://arxiv.org/abs/2006.11239",g:"ddpm.jpg",p:114*M,pm:"LSUN / CelebA-HQ 256² U-Net; the CIFAR-10 model is 35.7M",c:35580,
            w:"Learns to invert a noising process with a U-Net, step by step.",
            y:"The generative engine behind modern image models, and behind Diffusion Policy."},
-          {n:"ViT",f:"An Image is Worth 16x16 Words",d:"2020-10",a:"vis",u:"https://arxiv.org/abs/2010.11929",p:632*M,pm:"ViT-H/14; ViT-L is 307M",c:70540,
+          {n:"ViT",f:"An Image is Worth 16x16 Words",d:"2020-10",a:"vis",u:"https://arxiv.org/abs/2010.11929",g:"vit.jpg",p:632*M,pm:"ViT-H/14; ViT-L is 307M",c:70540,
            w:"Cuts an image into 16x16 patches, treats them as tokens, and feeds them to a plain transformer with no convolutions.",
            y:"Gave vision the same scalable architecture as language, so image models could ride the same data and compute curves."},
-          {n:"CLIP",f:"Learning Transferable Visual Models From Natural Language Supervision",d:"2021-02",a:"vis",u:"https://arxiv.org/abs/2103.00020",p:428*M,pm:"ViT-L/14, from the released weights; the paper gives no total",c:56475,
+          {n:"CLIP",f:"Learning Transferable Visual Models From Natural Language Supervision",d:"2021-02",a:"vis",u:"https://arxiv.org/abs/2103.00020",g:"clip.jpg",p:428*M,pm:"ViT-L/14, from the released weights; the paper gives no total",c:56475,
            w:"Contrastively matches 400M image-text pairs scraped from the web, learning one shared embedding space for pictures and captions.",
            y:"Large-scale visual pretraining without human labels. Open-vocabulary recognition, and the encoder that text-to-image models and VLMs were built on."},
-          {n:"MAE",f:"Masked Autoencoders Are Scalable Vision Learners",d:"2021-11",a:"vis",u:"https://arxiv.org/abs/2111.06377",p:632*M,pm:"ViT-H",c:12954,
+          {n:"MAE",f:"Masked Autoencoders Are Scalable Vision Learners",d:"2021-11",a:"vis",u:"https://arxiv.org/abs/2111.06377",g:"mae.jpg",p:632*M,pm:"ViT-H",c:12954,
            w:"Masks most patches and reconstructs them.",
            y:"Label-free pretraining for ViTs, the visual counterpart of masked language modelling."},
-          {n:"Latent Diffusion",f:"High-Resolution Image Synthesis with Latent Diffusion Models",d:"2021-12",a:"vis",u:"https://arxiv.org/abs/2112.10752",p:1.45*B,pm:"text-to-image LDM",c:27690,
+          {n:"Latent Diffusion",f:"High-Resolution Image Synthesis with Latent Diffusion Models",d:"2021-12",a:"vis",u:"https://arxiv.org/abs/2112.10752",g:"latent-diffusion.jpg",p:1.45*B,pm:"text-to-image LDM",c:27690,
            w:"Runs diffusion in a compressed latent space instead of pixel space.",
            y:"Made high-resolution text-to-image cheap enough to run anywhere; Stable Diffusion."},
-          {n:"Chain of thought",f:"Chain-of-Thought Prompting Elicits Reasoning",d:"2022-01",a:"lang",u:"https://arxiv.org/abs/2201.11903",p:0,pm:"prompting only; largest model studied is PaLM 540B",c:22335,
+          {n:"Chain of thought",f:"Chain-of-Thought Prompting Elicits Reasoning",d:"2022-01",a:"lang",u:"https://arxiv.org/abs/2201.11903",g:"chain-of-thought.jpg",p:0,pm:"prompting only; largest model studied is PaLM 540B",c:22335,
            w:"Prompts the model to write intermediate steps before answering.",
            y:"Opened the line of work on inference-time reasoning."},
-          {n:"InstructGPT",f:"Training language models to follow instructions with human feedback",d:"2022-03",a:"lang",u:"https://arxiv.org/abs/2203.02155",p:175*B,pm:"InstructGPT 175B; the headline result is a 1.3B model beating 175B GPT-3",c:24481,
+          {n:"InstructGPT",f:"Training language models to follow instructions with human feedback",d:"2022-03",a:"lang",u:"https://arxiv.org/abs/2203.02155",g:"instructgpt.jpg",p:175*B,pm:"InstructGPT 175B; the headline result is a 1.3B model beating 175B GPT-3",c:24481,
            w:"Supervised fine-tuning plus reinforcement learning from human preferences.",
            y:"The alignment recipe that made raw LMs usable as assistants."},
-          {n:"Chinchilla",f:"Training Compute-Optimal Large Language Models",d:"2022-03",a:"lang",u:"https://arxiv.org/abs/2203.15556",p:70*B,pm:"Chinchilla",c:3810,
+          {n:"Chinchilla",f:"Training Compute-Optimal Large Language Models",d:"2022-03",a:"lang",u:"https://arxiv.org/abs/2203.15556",g:"chinchilla.jpg",p:70*B,pm:"Chinchilla",c:3810,
            w:"Shows most large models were badly under-trained on data.",
            y:"Rebalanced the field from parameter count toward token count."},
-          {n:"FlashAttention",f:"FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",d:"2022-05",a:"lang",u:"https://arxiv.org/abs/2205.14135",p:0,pm:"an attention kernel, not a model",c:5422,
+          {n:"FlashAttention",f:"FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",d:"2022-05",a:"lang",u:"https://arxiv.org/abs/2205.14135",g:"flashattention.jpg",p:0,pm:"an attention kernel, not a model",c:5422,
            w:"Reorders the attention computation to keep tiles in fast on-chip SRAM, so it never materialises the full attention matrix in memory. Exact, not approximate.",
            y:"Made long contexts affordable, and turned hardware-aware kernel design into a first-class part of model research."},
-          {n:"PaLM",f:"PaLM: Scaling Language Modeling with Pathways",d:"2022-04",a:"lang",u:"https://arxiv.org/abs/2204.02311",p:540*B,pm:"PaLM 540B",c:8424,
+          {n:"PaLM",f:"PaLM: Scaling Language Modeling with Pathways",d:"2022-04",a:"lang",u:"https://arxiv.org/abs/2204.02311",g:"palm.jpg",p:540*B,pm:"PaLM 540B",c:8424,
            w:"A 540B dense model trained across thousands of accelerators with the Pathways system.",
            y:"Pushed dense scaling about as far as it went, and reported sharp jumps on reasoning benchmarks that motivated work on emergent abilities."},
-          {n:"SayCan",f:"Do As I Can, Not As I Say",d:"2022-04",a:"rob",u:"https://arxiv.org/abs/2204.01691",p:0,pm:"uses a frozen PaLM 540B as the planner",c:3809,
+          {n:"SayCan",f:"Do As I Can, Not As I Say",d:"2022-04",a:"rob",u:"https://arxiv.org/abs/2204.01691",g:"saycan.jpg",p:0,pm:"uses a frozen PaLM 540B as the planner",c:3809,
            w:"Grounds an LLM's plans in learned affordances of the robot's real skills.",
            y:"Early bridge from language models to long-horizon robot behaviour."},
-          {n:"RT-1",f:"RT-1: Robotics Transformer for Real-World Control at Scale",d:"2022-12",a:"rob",u:"https://arxiv.org/abs/2212.06817",p:35*M,pm:"RT-1",c:2908,
+          {n:"RT-1",f:"RT-1: Robotics Transformer for Real-World Control at Scale",d:"2022-12",a:"rob",u:"https://arxiv.org/abs/2212.06817",g:"rt-1.jpg",p:35*M,pm:"RT-1",c:2908,
            w:"Tokenizes robot actions and trains a transformer on 130k teleoperated demonstrations covering hundreds of tasks.",
            y:"Showed that the data-and-transformer recipe transfers to real manipulation, and that performance keeps improving with more robot data."},
-          {n:"LLaMA",f:"LLaMA: Open and Efficient Foundation Language Models",d:"2023-02",a:"lang",u:"https://arxiv.org/abs/2302.13971",p:65*B,pm:"LLaMA-65B",c:21753,
+          {n:"LLaMA",f:"LLaMA: Open and Efficient Foundation Language Models",d:"2023-02",a:"lang",u:"https://arxiv.org/abs/2302.13971",g:"llama.jpg",p:65*B,pm:"LLaMA-65B",c:21753,
            w:"Strong models trained on public data, with weights released to researchers.",
            y:"Set off the open-weight ecosystem most academic work now builds on."},
-          {n:"Diffusion Policy",f:"Diffusion Policy: Visuomotor Policy Learning via Action Diffusion",d:"2023-03",a:"rob",u:"https://arxiv.org/abs/2303.04137",p:278*M,pm:"CNN-based configuration; sizes are reported per task, not as one headline",c:4434,
+          {n:"Diffusion Policy",f:"Diffusion Policy: Visuomotor Policy Learning via Action Diffusion",d:"2023-03",a:"rob",u:"https://arxiv.org/abs/2303.04137",g:"diffusion-policy.jpg",p:278*M,pm:"CNN-based configuration; sizes are reported per task, not as one headline",c:4434,
            w:"Generates an action sequence by denoising, rather than regressing a single action per step.",
            y:"Handles multimodal demonstrations, where several different motions are all correct, and quickly became the baseline for visuomotor manipulation."},
-          {n:"SigLIP",f:"Sigmoid Loss for Language Image Pre-Training",d:"2023-03",a:"vis",u:"https://arxiv.org/abs/2303.15343",p:400*M,pm:"SigLIP-So400m vision tower, added in a later version",c:3917,
+          {n:"SigLIP",f:"Sigmoid Loss for Language Image Pre-Training",d:"2023-03",a:"vis",u:"https://arxiv.org/abs/2303.15343",g:"siglip.jpg",p:400*M,pm:"SigLIP-So400m vision tower, added in a later version",c:3917,
            w:"Replaces CLIP's softmax contrastive loss with a pairwise sigmoid loss that needs no global normalisation over the batch.",
            y:"Trains well without huge batches, so strong image-text encoders became much cheaper. Now a common vision tower in open VLMs."},
-          {n:"ACT / ALOHA",f:"Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware",d:"2023-04",a:"rob",u:"https://arxiv.org/abs/2304.13705",p:80*M,pm:"ACT",c:2503,
+          {n:"ACT / ALOHA",f:"Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware",d:"2023-04",a:"rob",u:"https://arxiv.org/abs/2304.13705",g:"act-aloha.jpg",p:80*M,pm:"ACT",c:2503,
            w:"Action-chunking transformer trained on cheap bimanual teleoperation hardware.",
            y:"Made dexterous imitation learning reproducible in ordinary labs."},
-          {n:"DINOv2",f:"DINOv2: Learning Robust Visual Features without Supervision",d:"2023-04",a:"vis",u:"https://arxiv.org/abs/2304.07193",p:1.1*B,pm:"ViT-g/14",c:10789,
+          {n:"DINOv2",f:"DINOv2: Learning Robust Visual Features without Supervision",d:"2023-04",a:"vis",u:"https://arxiv.org/abs/2304.07193",g:"dinov2.jpg",p:1.1*B,pm:"ViT-g/14",c:10789,
            w:"Self-distillation at scale on curated image data.",
            y:"General visual features that work without fine-tuning, including for dense tasks."},
-          {n:"SAM",f:"Segment Anything",d:"2023-04",a:"vis",u:"https://arxiv.org/abs/2304.02643",p:636*M,pm:"ViT-H image encoder; not stated in the paper",c:15845,
+          {n:"SAM",f:"Segment Anything",d:"2023-04",a:"vis",u:"https://arxiv.org/abs/2304.02643",g:"sam.jpg",p:636*M,pm:"ViT-H image encoder; not stated in the paper",c:15845,
            w:"Promptable segmentation trained on a billion masks.",
            y:"A foundation model for a classic dense task, plus a data engine recipe."},
-          {n:"RT-2",f:"RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",d:"2023-07",a:"rob",u:"https://arxiv.org/abs/2307.15818",p:55*B,pm:"RT-2-PaLI-X-55B",c:4432,
+          {n:"RT-2",f:"RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",d:"2023-07",a:"rob",u:"https://arxiv.org/abs/2307.15818",g:"rt-2.jpg",p:55*B,pm:"RT-2-PaLI-X-55B",c:4432,
            w:"Fine-tunes a pretrained vision-language model to emit actions as text tokens, co-trained on web data and robot data.",
            y:"The vision-language-action template: semantic knowledge from the web shows up as better generalisation on the robot."},
-          {n:"3D Gaussian Splatting",f:"3D Gaussian Splatting for Real-Time Radiance Field Rendering",d:"2023-08",a:"vis",u:"https://arxiv.org/abs/2308.04079",p:0,pm:"an explicit scene of millions of Gaussians, not a trained network",c:10562,
+          {n:"3D Gaussian Splatting",f:"3D Gaussian Splatting for Real-Time Radiance Field Rendering",d:"2023-08",a:"vis",u:"https://arxiv.org/abs/2308.04079",g:"3d-gaussian-splatting.jpg",p:0,pm:"an explicit scene of millions of Gaussians, not a trained network",c:10562,
            w:"Represents a scene as millions of anisotropic 3D Gaussians and rasterises them with a differentiable splatting pass.",
            y:"Matched NeRF quality at real-time rates, and moved 3D reconstruction back toward explicit, editable representations."},
-          {n:"Mamba",f:"Mamba: Linear-Time Sequence Modeling with Selective State Spaces",d:"2023-12",a:"lang",u:"https://arxiv.org/abs/2312.00752",p:2.8*B,pm:"largest of the trained models",c:9306,
+          {n:"Mamba",f:"Mamba: Linear-Time Sequence Modeling with Selective State Spaces",d:"2023-12",a:"lang",u:"https://arxiv.org/abs/2312.00752",g:"mamba.jpg",p:2.8*B,pm:"largest of the trained models",c:9306,
            w:"A state space model whose parameters depend on the input, with a hardware-aware parallel scan. Costs grow linearly in sequence length, not quadratically.",
            y:"The strongest challenge yet to attention as the default sequence mixer, and the root of the hybrid architectures that followed."},
-          {n:"Open X-Embodiment",f:"Open X-Embodiment: Robotic Learning Datasets and RT-X Models",d:"2023-10",a:"rob",u:"https://arxiv.org/abs/2310.08864",p:55*B,pm:"RT-2-X; the dataset, not the model, is the contribution",c:1203,
+          {n:"Open X-Embodiment",f:"Open X-Embodiment: Robotic Learning Datasets and RT-X Models",d:"2023-10",a:"rob",u:"https://arxiv.org/abs/2310.08864",g:"open-x-embodiment.jpg",p:55*B,pm:"RT-2-X; the dataset, not the model, is the contribution",c:1203,
            w:"Pools demonstrations from many labs and robot bodies into one dataset, then trains RT-X models on it.",
            y:"Cross-embodiment training: one policy improves by learning from other robots."},
-          {n:"Octo",f:"Octo: An Open-Source Generalist Robot Policy",d:"2024-05",a:"rob",u:"https://arxiv.org/abs/2405.12213",p:93*M,pm:"Octo-Base",c:1934,
+          {n:"Octo",f:"Octo: An Open-Source Generalist Robot Policy",d:"2024-05",a:"rob",u:"https://arxiv.org/abs/2405.12213",g:"octo.jpg",p:93*M,pm:"Octo-Base",c:1934,
            w:"Open generalist policy, easy to fine-tune to new robots.",
            y:"Made generalist manipulation policies accessible outside big industry labs."},
-          {n:"OpenVLA",f:"OpenVLA: An Open-Source Vision-Language-Action Model",d:"2024-06",a:"rob",u:"https://arxiv.org/abs/2406.09246",p:7*B,pm:"OpenVLA 7B",c:3626,
+          {n:"OpenVLA",f:"OpenVLA: An Open-Source Vision-Language-Action Model",d:"2024-06",a:"rob",u:"https://arxiv.org/abs/2406.09246",g:"openvla.jpg",p:7*B,pm:"OpenVLA 7B",c:3626,
            w:"Open 7B vision-language-action model trained on Open X-Embodiment data.",
            y:"Put the RT-2 recipe in the open, with efficient fine-tuning."},
-          {n:"pi-0",f:"A Vision-Language-Action Flow Model for General Robot Control",d:"2024-10",a:"rob",u:"https://arxiv.org/abs/2410.24164",p:3.3*B,pm:"3B VLM plus a 300M action expert",c:2885,
+          {n:"pi-0",f:"A Vision-Language-Action Flow Model for General Robot Control",d:"2024-10",a:"rob",u:"https://arxiv.org/abs/2410.24164",g:"pi-0.jpg",p:3.3*B,pm:"3B VLM plus a 300M action expert",c:2885,
            w:"A VLA with a flow-matching action head for high-frequency continuous control.",
            y:"Pushes VLAs from discrete tokens toward smooth dexterous motion."},
-          {n:"DeepSeek-R1",f:"DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via RL",d:"2025-01",a:"lang",u:"https://arxiv.org/abs/2501.12948",p:671*B,pm:"671B total, 37B active per token (MoE)",c:5771,
+          {n:"DeepSeek-R1",f:"DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via RL",d:"2025-01",a:"lang",u:"https://arxiv.org/abs/2501.12948",g:"deepseek-r1.jpg",p:671*B,pm:"671B total, 37B active per token (MoE)",c:5771,
            w:"Reinforcement learning on verifiable rewards grows long reasoning traces.",
            y:"Showed reasoning behaviour can be trained, not just prompted, with open weights."}
         ];
-        var AREA={lang:"Language",vis:"Vision",rob:"Robotics"};
+        var AREA={lang:"Language Model",vis:"Vision",rob:"Robotics"};
         var AXES={
           p:{key:"p",name:"params",decades:[6,7,8,9,10,11,12],na:5.4,
              grid:function(e){return e>=12?"1T":e>=9?Math.pow(10,e-9)+"B":Math.pow(10,e-6)+"M";},
@@ -209,13 +235,66 @@
         function t(d){var p=d.split("-");return parseInt(p[0],10)+(parseInt(p[1],10)-1)/12;}
         function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
         var pinned=null;
+        var COLOR={lang:"#4a7fb5",vis:"#3f9f72",rob:"#d98032"};
+
+        // ---------- floating card, shown next to the pointer ----------
+        var peek=document.createElement("div");
+        peek.className="tlw-peek";peek.hidden=true;peek.setAttribute("role","dialog");
+        document.body.appendChild(peek);   // on body, so position:fixed is not caught by a transformed parent
+        var hideTimer=null,current=null,stuck=false;
+        function peekHTML(it){
+          var ax=AXES[sel.value],v=it[ax.key];
+          var host=it.u.replace(/^https?:\/\/(www\.)?([^\/]+).*/,"$2");
+          var fig=it.g?'<div class="pk-fig"><img src="../../files/figs/'+esc(it.g)+
+            '" alt="Key figure from '+esc(it.n)+'"></div>':"";
+          return fig+'<div class="pk-body">'+
+            '<div class="pk-meta"><i style="background:'+COLOR[it.a]+'"></i>'+it.d.replace("-","/")+
+              ' &middot; '+esc(host)+(v?' &middot; '+esc(ax.fmt(v)):"")+'</div>'+
+            '<h4>'+esc(it.n)+'</h4>'+
+            '<p class="pk-sum">'+esc(it.f)+(it.pm?' &middot; '+esc(it.pm):"")+'</p>'+
+            '<div class="pk-lbl">What it does</div><p class="pk-txt">'+esc(it.w)+'</p>'+
+            '<div class="pk-lbl">Why it matters</div><p class="pk-txt">'+esc(it.y)+'</p>'+
+            '<a class="pk-open" href="'+it.u+'" target="_blank" rel="noopener">Open paper on '+esc(host)+'</a>'+
+            '</div>';
+        }
+        function place(x,y){
+          var r=peek.getBoundingClientRect(),pad=12,vw=innerWidth,vh=innerHeight;
+          var left=x+18,top=y+14;
+          if(left+r.width+pad>vw)left=Math.max(pad,x-r.width-18);
+          if(top+r.height+pad>vh)top=Math.max(pad,vh-r.height-pad);
+          peek.style.left=left+"px";peek.style.top=top+"px";
+        }
+        function showPeek(it,x,y){
+          clearTimeout(hideTimer);
+          if(current!==it){peek.innerHTML=peekHTML(it);current=it;}
+          peek.hidden=false;place(x,y);
+          var img=peek.querySelector("img");
+          if(img&&!img.complete)img.onload=function(){place(x,y);};
+        }
+        function hidePeek(delay){
+          if(stuck)return;
+          clearTimeout(hideTimer);
+          hideTimer=setTimeout(function(){peek.hidden=true;current=null;},delay===undefined?160:delay);
+        }
+        peek.addEventListener("pointerenter",function(){clearTimeout(hideTimer);});
+        peek.addEventListener("pointerleave",function(){hidePeek();});
+        document.addEventListener("keydown",function(e){if(e.key==="Escape"){stuck=false;hidePeek(0);}});
+
         function show(it){
           var ax=AXES[sel.value],v=it[ax.key];
-          panel.innerHTML='<h4><a href="'+it.u+'" target="_blank" rel="noopener">'+esc(it.f)+'</a></h4>'+
-            '<p class="tlw-meta">'+esc(it.n)+' &middot; '+AREA[it.a]+' &middot; '+it.d.replace("-","/")+
-            ' &middot; '+esc(v?ax.fmt(v):ax.none)+(it.pm?' <span class="tlw-dim">('+esc(it.pm)+')</span>':'')+'</p>'+
-            '<p><b>What it does.</b> '+esc(it.w)+'</p>'+
-            '<p><b>Why it matters.</b> '+esc(it.y)+'</p>';
+          var host=it.u.indexOf("arxiv.org")>-1?"arxiv.org":it.u.replace(/^https?:\/\/([^\/]+).*/,"$1");
+          var fig=it.g?'<img class="tlw-fig" src="../../files/figs/'+esc(it.g)+
+            '" alt="Key figure from '+esc(it.n)+'" loading="lazy">':"";
+          panel.innerHTML=fig+'<div class="tlw-body">'+
+            '<p class="tlw-meta"><span class="tlw-mdot" style="background:'+COLOR[it.a]+'"></span>'+
+              it.d.split("-")[0]+'<span class="sep">&middot;</span>'+AREA[it.a]+
+              '<span class="sep">&middot;</span>'+esc(host)+
+              (v?'<span class="sep">&middot;</span>'+esc(ax.fmt(v)):"")+'</p>'+
+            '<h4><a href="'+it.u+'" target="_blank" rel="noopener">'+esc(it.n)+'</a></h4>'+
+            '<p class="tlw-sub">'+esc(it.f)+(it.pm?' &middot; '+esc(it.pm):"")+'</p>'+
+            '<p class="tlw-lbl">What it does</p><p>'+esc(it.w)+'</p>'+
+            '<p class="tlw-lbl">Why it matters</p><p>'+esc(it.y)+'</p>'+
+            '</div>';
         }
         function render(){
           var ax=AXES[sel.value];
@@ -238,34 +317,82 @@
             tick.className="tlw-tick";tick.style.left=((y-lo)/(hi-lo)*100)+"%";tick.textContent=y;
             plot.appendChild(tick);
           }
-          var placed=[];
-          items.forEach(function(it){
+          // pixel geometry, so labels can be packed without overlapping
+          var W=plot.clientWidth||960, H=plot.clientHeight||430;
+          var CH=12;                                   // label height in px
+          function labW(s){return s.length*5.6+4;}     // rough width at .7rem
+          // candidate label positions, as offsets from the dot centre (dx is scaled by width)
+          var SPOTS=[[0,-14],[0,14],[1,-2],[-1,-2],[0,-27],[0,27],[1,-15],[-1,-15],[1,13],[-1,13],
+                     [0,-40],[0,40],[1,-28],[-1,-28],[1,26],[-1,26],[0,-53],[0,53],[1,-41],[-1,-41],
+                     [1,39],[-1,39],[0,-66],[0,66],[1,-54],[-1,-54],[1,52],[-1,52]];
+          var boxes=[],dots=[];
+          var placed=items.map(function(it){
             var x=(t(it.d)-lo)/(hi-lo)*100, yy=py(it[ax.key]);
+            return {it:it,x:x,y:yy,px:x/100*W,py:H-yy/100*H};
+          });
+          placed.forEach(function(p){dots.push({x:p.px,y:p.py,w:22,h:22});});
+          function hits(b){
+            var i;
+            for(i=0;i<boxes.length;i++)if(overlap(b,boxes[i]))return true;
+            for(i=0;i<dots.length;i++)if(overlap(b,dots[i]))return true;
+            return false;
+          }
+          function overlap(a,b){
+            return Math.abs(a.x-b.x)*2<(a.w+b.w+6)&&Math.abs(a.y-b.y)*2<(a.h+b.h+4);
+          }
+          placed.forEach(function(p){
+            var w=labW(p.it.n),spot=SPOTS[0],i,c,box;
+            for(i=0;i<SPOTS.length;i++){
+              c=SPOTS[i];
+              box={x:p.px+c[0]*(w/2+13),y:p.py+c[1],w:w,h:CH};
+              if(!hits(box)){spot=c;break;}
+            }
+            if(i===SPOTS.length)box={x:p.px+spot[0]*(w/2+13),y:p.py+spot[1],w:w,h:CH};
+            boxes.push(box);
+            p.lab={x:box.x,y:box.y};
+          });
+          placed.forEach(function(p){
+            var it=p.it;
             var b=document.createElement("button");
             b.type="button";b.className="tlw-item";b.setAttribute("data-area",it.a);
-            b.style.left=x+"%";b.style.bottom=yy+"%";
-            var near=placed.filter(function(q){return Math.abs(q.x-x)<11&&Math.abs(q.y-yy)<9;});
-            if(near.length>2)b.className+=" lab-hidden";        // too crowded: label on hover only
-            else if(near.length>0)b.className+=" lab-below";    // flip under the dot
-            placed.push({x:x,y:yy});
-            b.innerHTML='<span class="tlw-label">'+esc(it.n)+'</span><span class="tlw-mark"></span>';
-            b.addEventListener("mouseenter",function(){if(!pinned)show(it);});
-            b.addEventListener("focus",function(){if(!pinned)show(it);});
-            b.addEventListener("click",function(){
+            b.style.left=p.px+"px";b.style.top=p.py+"px";
+            b.innerHTML='<span class="tlw-mark"></span>';
+            var lab=document.createElement("span");
+            lab.className="tlw-lab";lab.textContent=it.n;
+            lab.style.left=p.lab.x+"px";lab.style.top=p.lab.y+"px";
+            function enter(e){
+              show(it);                                   // touch fallback panel below the plot
+              showPeek(it,e.clientX,e.clientY);           // floating card next to the pointer
+            }
+            function pin(e){
               var was=pinned===it;
-              Array.prototype.forEach.call(plot.querySelectorAll(".tlw-item"),function(e){e.classList.remove("is-active");});
-              pinned=was?null:it; if(!was){b.classList.add("is-active");}
+              Array.prototype.forEach.call(plot.querySelectorAll(".is-active"),function(el){el.classList.remove("is-active");});
+              pinned=was?null:it;stuck=!was;
+              if(!was){b.classList.add("is-active");lab.classList.add("is-active");}
               show(it);
+              if(was){hidePeek(0);}else{showPeek(it,e.clientX,e.clientY);}
+            }
+            [b,lab].forEach(function(el){
+              el.addEventListener("pointerenter",enter);
+              el.addEventListener("pointerleave",function(){hidePeek();});
+              el.addEventListener("click",pin);
             });
-            plot.appendChild(b);
+            b.addEventListener("focus",function(){
+              var r=b.getBoundingClientRect();show(it);showPeek(it,r.right,r.top);
+            });
+            b.addEventListener("blur",function(){hidePeek();});
+            plot.appendChild(b);plot.appendChild(lab);
           });
         }
         sel.addEventListener("change",function(){pinned=null;render();});
         render();
+        // label packing is in pixels, so redo it once the page has settled and on resize
+        window.addEventListener("load",render);
+        var t0;window.addEventListener("resize",function(){clearTimeout(t0);t0=setTimeout(render,150);});
       })();
       </script>
 
-      <p class="tlw-note">Model sizes are the flagship model of each paper; several papers never state a count, and those are marked in the panel. Citation counts come from Semantic Scholar and are a snapshot, not a live figure; NeRF is split across several records there, so its number is an undercount.</p>
+      <p class="tlw-note">Model sizes are the flagship model of each paper; several papers never state a count, and those are marked in the panel. Citation counts come from Semantic Scholar, as of 30 September 2026, and are a snapshot rather than a live figure; NeRF is split across several records there, so its number is an undercount.</p>
 
       <h2>Language</h2>
       <ul>

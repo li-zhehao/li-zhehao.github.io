@@ -300,6 +300,16 @@ pre {
   background-color: var(--theme-color);
   border-color: var(--theme-color);
 }
+.blog-section {
+  margin: 1.75rem 0 0.9rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  font-weight: bolder;
+}
+.blog-section:first-of-type {
+  margin-top: 0;
+}
+
 .tag {
   display: inline-block;
   margin: 0.15rem 0.3rem 0 0;

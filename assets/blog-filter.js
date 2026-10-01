@@ -5,11 +5,21 @@ document.addEventListener('DOMContentLoaded', function () {
   var buttons = bar.querySelectorAll('[data-filter]');
   var items = document.querySelectorAll('.blog-item');
 
+  var headings = document.querySelectorAll('.blog-section');
+
   function apply(filter) {
     items.forEach(function (item) {
       var tags = (item.getAttribute('data-tags') || '').split('|');
       var show = filter === 'all' || tags.indexOf(filter) !== -1;
       item.classList.toggle('d-none', !show);
+    });
+    // hide a section heading when the filter leaves nothing under it
+    headings.forEach(function (h) {
+      var section = h.getAttribute('data-section');
+      var any = Array.prototype.some.call(items, function (item) {
+        return item.getAttribute('data-section') === section && !item.classList.contains('d-none');
+      });
+      h.classList.toggle('d-none', !any);
     });
     buttons.forEach(function (btn) {
       btn.classList.toggle('active', btn.getAttribute('data-filter') === filter);
