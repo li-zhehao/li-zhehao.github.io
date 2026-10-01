@@ -10,8 +10,10 @@
 var GISCUS = {
   repo: 'li-zhehao/li-zhehao.github.io',
   repoId: 'R_kgDOJogcKA',
-  category: 'Announcements',
-  categoryId: 'DIC_kwDOJogcKM4DG1BQ',
+  // "General" is an open category: visitors' first comment creates the discussion.
+  // Announcement-type categories reject this, since only maintainers may create there.
+  category: 'General',
+  categoryId: 'DIC_kwDOJogcKM4DG1BR',
 };
 
 (function () {
