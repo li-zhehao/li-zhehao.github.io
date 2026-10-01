@@ -132,6 +132,10 @@ body {
   border-bottom: 1px solid var(--blog-border);
 }
 
+.d-reads {
+  font-variant-numeric: tabular-nums;
+}
+
 .d-tags .tag {
   display: inline-block;
   margin-right: 0.3rem;
@@ -266,6 +270,27 @@ body {
   border: none;
   border-top: 1px solid var(--blog-border);
   margin: 2rem 0;
+}
+
+.d-comments {
+  max-width: var(--blog-width);
+  margin: 0 auto;
+  padding: 2rem 1.5rem 1rem;
+  border-top: 1px solid var(--blog-border);
+}
+
+.d-comments h2 {
+  font-family: var(--blog-sans);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+
+.d-comments-note {
+  font-family: var(--blog-sans);
+  font-size: 0.85rem;
+  color: var(--blog-muted);
+  margin: 0 0 1.25rem;
 }
 
 .d-footer {

@@ -102,7 +102,7 @@ A hall of fame of seminal papers that shaped the modern AI landscape; a personal
     {n:"Scaling laws",f:"Scaling Laws for Neural Language Models",d:"2020-01",a:"lang",u:"https://arxiv.org/abs/2001.08361",g:"scaling-laws.jpg",p:0,pm:"a sweep up to 1.5B non-embedding parameters",c:9151,
      w:"Loss falls as a power law in parameters, data and compute.",
      y:"Turned model building into a budgeting problem with predictable returns."},
-    {n:"NeRF",f:"NeRF: Representing Scenes as Neural Radiance Fields",d:"2020-03",a:"vis",u:"https://arxiv.org/abs/2003.08934",g:"nerf.jpg",p:1.2*M,pm:"per-scene MLP, derived from the paper's “5 MB of weights”",c:5513,
+    {n:"NeRF",f:"NeRF: Representing Scenes as Neural Radiance Fields",d:"2020-03",a:"vis",u:"https://arxiv.org/abs/2003.08934",g:"nerf.jpg",p:1.2*M,pm:"per-scene MLP, derived from the paper's “5 MB of weights”",c:21990,
      w:"Fits a volumetric radiance field to posed images, one small MLP per scene.",
      y:"Started the neural-field line of work in 3D vision and graphics."},
     {n:"GPT-3",f:"Language Models are Few-Shot Learners",d:"2020-05",a:"lang",u:"https://arxiv.org/abs/2005.14165",g:"gpt-3.jpg",p:175*B,pm:"GPT-3 175B",c:63952,
@@ -362,7 +362,7 @@ A hall of fame of seminal papers that shaped the modern AI landscape; a personal
 })();
 </script>
 
-<p class="tlw-note">Model sizes are the flagship model of each paper; several papers never state a count, and those are marked in the panel. Citation counts come from Semantic Scholar, as of 30 September 2026, and are a snapshot rather than a live figure; NeRF is split across several records there, so its number is an undercount.</p>
+<p class="tlw-note">Model sizes are the flagship model of each paper; several papers never state a count, and those are marked in the panel. Citation counts are a snapshot as of 30 September 2026, not a live figure, and come from Semantic Scholar except NeRF, whose records are split there.</p>
 
 ## Language
 

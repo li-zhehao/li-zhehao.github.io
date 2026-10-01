@@ -162,6 +162,10 @@ def render_article(
   <link rel="canonical" href="{canonical}">
   <link rel="stylesheet" href="{asset_root}assets/blog.css">
   <script src="{asset_root}assets/theme.js"></script>
+  <!-- GoatCounter: privacy-friendly page counts, no cookies -->
+  <script data-goatcounter="https://zhehaoli.goatcounter.com/count"
+    async src="//gc.zgo.at/count.js"></script>
+  <script src="{asset_root}assets/reads.js"></script>
   <script src="https://kit.fontawesome.com/13cb060381.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.10.0/styles/github.min.css">
@@ -185,7 +189,8 @@ def render_article(
       <h1 class="d-title">{safe_title}</h1>
 {lede}      <div class="d-byline">
         <span><strong>{html.escape(author)}</strong></span>
-        <span>{html.escape(date)}</span>{tag_html}
+        <span>{html.escape(date)}</span>
+        <span class="d-reads" data-reads="/blogs/{html.escape(slug)}/" hidden></span>{tag_html}
       </div>
     </header>
     <div class="d-body">
@@ -193,9 +198,17 @@ def render_article(
     </div>
   </article>
 
+  <section class="d-comments">
+    <h2>Comments</h2>
+    <p class="d-comments-note">Sign in with GitHub to comment. Threads live in this site's GitHub Discussions.</p>
+    <div id="comments"></div>
+  </section>
+
   <footer class="d-footer">
     <a href="{asset_root}blog.html">Back to all posts</a>
   </footer>
+
+  <script src="{asset_root}assets/comments.js"></script>
 
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
@@ -235,7 +248,8 @@ def render_blog_list_item(post: dict) -> str:
           <p>
             {html.escape(post['abstract'])}
             <br>
-            <span style="color: #ED7D31">{html.escape(post['date'])}</span>{tag_html}
+            <span style="color: #ED7D31">{html.escape(post['date'])}</span>
+            <span class="tag reads" data-reads="/blogs/{html.escape(post['slug'])}/" hidden></span>{tag_html}
           </p>
         </div>
       </div>"""

@@ -319,6 +319,10 @@ pre {
   font-size: 13px;
   opacity: 0.85;
 }
+.tag.reads {
+  border-style: dashed;
+  cursor: default;
+}
 .tag:hover {
   border-color: var(--theme-color);
   color: var(--theme-color);

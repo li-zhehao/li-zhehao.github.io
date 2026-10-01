@@ -131,6 +131,10 @@ function renderArticleHtml({ title, author, date, abstract, bodyHtml, slug, lang
   <link rel="canonical" href="${canonical}">
   <link rel="stylesheet" href="${assetRoot}assets/blog.css">
   <script src="${assetRoot}assets/theme.js"></script>
+  <!-- GoatCounter: privacy-friendly page counts, no cookies -->
+  <script data-goatcounter="https://zhehaoli.goatcounter.com/count"
+    async src="//gc.zgo.at/count.js"></script>
+  <script src="${assetRoot}assets/reads.js"></script>
   <script src="https://kit.fontawesome.com/13cb060381.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.10.0/styles/github.min.css">
@@ -154,7 +158,8 @@ function renderArticleHtml({ title, author, date, abstract, bodyHtml, slug, lang
       <h1 class="d-title">${safeTitle}</h1>
 ${ledeBlock}      <div class="d-byline">
         <span><strong>${escapeHtml(author)}</strong></span>
-        <span>${escapeHtml(date)}</span>${tagHtml}
+        <span>${escapeHtml(date)}</span>
+        <span class="d-reads" data-reads="/blogs/${escapeHtml(slug)}/" hidden></span>${tagHtml}
       </div>
     </header>
     <div class="d-body">
@@ -162,9 +167,17 @@ ${bodyHtml}
     </div>
   </article>
 
+  <section class="d-comments">
+    <h2>Comments</h2>
+    <p class="d-comments-note">Sign in with GitHub to comment. Threads live in this site's GitHub Discussions.</p>
+    <div id="comments"></div>
+  </section>
+
   <footer class="d-footer">
     <a href="${assetRoot}blog.html">Back to all posts</a>
   </footer>
+
+  <script src="${assetRoot}assets/comments.js"></script>
 
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
@@ -199,7 +212,8 @@ function renderBlogListItem(post) {
           <p>
             ${escapeHtml(post.abstract)}
             <br>
-            <span style="color: #ED7D31">${escapeHtml(post.date)}</span>${tagHtml}
+            <span style="color: #ED7D31">${escapeHtml(post.date)}</span>
+            <span class="tag reads" data-reads="/blogs/${escapeHtml(post.slug)}/" hidden></span>${tagHtml}
           </p>
         </div>
       </div>`;
