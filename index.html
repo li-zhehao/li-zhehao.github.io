@@ -214,7 +214,8 @@
             <a href="https://asia.siggraph.org/2026/" , style="color: #ED7D31">SIGGRAPH Asia 2026 Conference Papers</a>
           </p>
           <p class="tldr"><b>TL;DR:</b> Bubbles make most of the sound of water, and their pitch depends partly on
-            shape; we predict it from shape ~1400× faster than the exact solver, within 1% error.</p>
+            shape, we predict it from shape up to ~1400× faster than the exact solver, within 1% error on the test
+            set.</p>
           <a href="https://stanford-gfxsim.github.io/BubbleGym/" target="_self" class="btn btn-sm mb-1"><i
               class="fa-regular fa-window-restore"></i> Webpage</a>
           <a href="https://drive.google.com/file/d/1zbNWpLHeS4T3vRF14Bb3kKyYksr4LAya/view?usp=sharing" class="btn btn-sm mb-1">
@@ -351,7 +352,9 @@
             <!--<a href="https://asia.siggraph.org/2023/">ACM Transactions on Graphics (Proceedings of SIGGGRAPH Asia 2023)</a>-->
           </p>
           <p class="tldr"><b>TL;DR:</b> A particle-based fluid-rigid coupling simulator you can get gradients
-            from, optimizing a rigid body's motion in water up to 10× faster than gradient-free baselines.</p>
+            from. Gradients of a particle system can be unstable and noisy, but a localized gradient scheme greatly
+            helps. Optimizing a
+            rigid body's motion in water up to 10× faster than gradient-free baselines.</p>
           <a href="https://li-zhehao.github.io/DiffFR" target="_self" class="btn btn-sm mb-1"><i
               class="fa-regular fa-window-restore"></i> Webpage</a>
           <a href="https://li-zhehao.github.io/DiffFR/files/DiffFR.pdf" class="btn btn-sm mb-1">

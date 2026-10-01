@@ -105,6 +105,9 @@ A running list of the papers I keep coming back to when explaining how today's m
     {n:"Chinchilla",f:"Training Compute-Optimal Large Language Models",d:"2022-03",a:"lang",u:"https://arxiv.org/abs/2203.15556",p:70*B,pm:"Chinchilla",c:3810,
      w:"Shows most large models were badly under-trained on data.",
      y:"Rebalanced the field from parameter count toward token count."},
+    {n:"FlashAttention",f:"FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",d:"2022-05",a:"lang",u:"https://arxiv.org/abs/2205.14135",p:0,pm:"an attention kernel, not a model",c:5422,
+     w:"Reorders the attention computation to keep tiles in fast on-chip SRAM, so it never materialises the full attention matrix in memory. Exact, not approximate.",
+     y:"Made long contexts affordable, and turned hardware-aware kernel design into a first-class part of model research."},
     {n:"PaLM",f:"PaLM: Scaling Language Modeling with Pathways",d:"2022-04",a:"lang",u:"https://arxiv.org/abs/2204.02311",p:540*B,pm:"PaLM 540B",c:8424,
      w:"A 540B dense model trained across thousands of accelerators with the Pathways system.",
      y:"Pushed dense scaling about as far as it went, and reported sharp jumps on reasoning benchmarks that motivated work on emergent abilities."},
@@ -138,6 +141,9 @@ A running list of the papers I keep coming back to when explaining how today's m
     {n:"3D Gaussian Splatting",f:"3D Gaussian Splatting for Real-Time Radiance Field Rendering",d:"2023-08",a:"vis",u:"https://arxiv.org/abs/2308.04079",p:0,pm:"an explicit scene of millions of Gaussians, not a trained network",c:10562,
      w:"Represents a scene as millions of anisotropic 3D Gaussians and rasterises them with a differentiable splatting pass.",
      y:"Matched NeRF quality at real-time rates, and moved 3D reconstruction back toward explicit, editable representations."},
+    {n:"Mamba",f:"Mamba: Linear-Time Sequence Modeling with Selective State Spaces",d:"2023-12",a:"lang",u:"https://arxiv.org/abs/2312.00752",p:2.8*B,pm:"largest of the trained models",c:9306,
+     w:"A state space model whose parameters depend on the input, with a hardware-aware parallel scan. Costs grow linearly in sequence length, not quadratically.",
+     y:"The strongest challenge yet to attention as the default sequence mixer, and the root of the hybrid architectures that followed."},
     {n:"Open X-Embodiment",f:"Open X-Embodiment: Robotic Learning Datasets and RT-X Models",d:"2023-10",a:"rob",u:"https://arxiv.org/abs/2310.08864",p:55*B,pm:"RT-2-X; the dataset, not the model, is the contribution",c:1203,
      w:"Pools demonstrations from many labs and robot bodies into one dataset, then trains RT-X models on it.",
      y:"Cross-embodiment training: one policy improves by learning from other robots."},
@@ -235,6 +241,7 @@ A running list of the papers I keep coming back to when explaining how today's m
 - **[Attention Is All You Need](https://arxiv.org/abs/1706.03762)** (2017) — the transformer architecture.
 - **[GPT-2](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf)** (2019) and **[GPT-3](https://arxiv.org/abs/2005.14165)** (2020) — zero-shot and then in-context learning out of plain next-token pretraining.
 - **[PaLM](https://arxiv.org/abs/2204.02311)** (2022) — dense scaling to 540B, and the reasoning jumps that came with it.
+- **[FlashAttention](https://arxiv.org/abs/2205.14135)** (2022) and **[Mamba](https://arxiv.org/abs/2312.00752)** (2023) — making attention cheap by respecting the memory hierarchy, then questioning whether attention is needed at all.
 - Also on the plot: [BERT](https://arxiv.org/abs/1810.04805), [scaling laws](https://arxiv.org/abs/2001.08361), [Chinchilla](https://arxiv.org/abs/2203.15556), [chain-of-thought](https://arxiv.org/abs/2201.11903), [InstructGPT](https://arxiv.org/abs/2203.02155), [LLaMA](https://arxiv.org/abs/2302.13971), [DeepSeek-R1](https://arxiv.org/abs/2501.12948).
 
 ## Vision
