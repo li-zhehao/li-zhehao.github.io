@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The milestone work that shapes modern AI models | Zhehao Li</title>
+  <meta name="description" content="An interactive timeline of the papers behind today&#x27;s language, vision, and robotics models.">
+  <link rel="icon" type="image/x-icon" href="../../files/duck_icon.png">
+  <link rel="canonical" href="https://li-zhehao.github.io/blogs/2026-09-30-milestones-of-modern-ai/">
+  <link rel="stylesheet" href="../../assets/blog.css">
+  <script src="../../assets/theme.js"></script>
+  <script src="https://kit.fontawesome.com/13cb060381.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.10.0/styles/github.min.css">
+</head>
+<body>
+  <header class="d-site-header">
+    <a class="d-brand" href="../../index.html">Zhehao Li</a>
+    <nav>
+      <a href="../../index.html">Home</a>
+      <a href="../../index.html#news">News</a>
+      <a href="../../index.html#publications">Publications</a>
+      <a href="../../index.html#service">Service</a>
+      <a href="../../index.html#teaching">Teaching</a>
+      <a class="active" href="../../blog.html">Blog</a>
+      <button type="button" class="theme-toggle" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+    </nav>
+  </header>
+
+  <article class="d-article">
+    <header>
+      <h1 class="d-title">The milestone work that shapes modern AI models</h1>
+      <p class="d-lede">An interactive timeline of the papers behind today&#x27;s language, vision, and robotics models.</p>
+      <div class="d-byline">
+        <span><strong>Zhehao Li</strong></span>
+        <span>September 30, 2026</span>
+        <span class="d-tags"><span class="tag">paper reading</span><span class="tag">technical</span></span>
+      </div>
+    </header>
+    <div class="d-body">
+      <p>A running list of the papers I keep coming back to when explaining how today's models got here. Time runs left to right; the y axis is either the size of each paper's flagship model or how often the paper has been cited, both on a logarithmic scale. Blue is language, green is vision, orange is robotics. <strong>Hover a dot</strong> (or tap it on a phone) to see what the paper did and why it mattered; click to pin it.</p>
+      <div class="tlw" id="ai-timeline"><div class="tlw-head"><div class="tlw-legend"><span class="tlw-key"><i class="tlw-dot-lang"></i>Language</span><span class="tlw-key"><i class="tlw-dot-vis"></i>Vision</span><span class="tlw-key"><i class="tlw-dot-rob"></i>Robotics</span></div><label class="tlw-toggle">y axis: <select id="tlw-yaxis"><option value="p">model size</option><option value="c">citations</option></select></label></div><div class="tlw-scroll"><div class="tlw-track" id="tlw-track"></div></div><div class="tlw-panel" id="tlw-panel"><p class="tlw-hint">Hover or tap a dot to read about the paper.</p></div></div>
+
+      <style>
+      /* the plot breaks out of the 720px text column so it fits without sideways scrolling */
+      .tlw{position:relative;left:50%;transform:translateX(-50%);width:min(1120px,94vw);margin:1.75rem 0;font-family:var(--blog-sans);font-size:.85rem}
+      .tlw-head{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+      .tlw-legend{display:flex;flex-wrap:wrap;gap:.75rem}
+      .tlw-key{display:inline-flex;align-items:center;gap:.35rem;color:var(--blog-muted)}
+      .tlw-key i{width:10px;height:10px;border-radius:50%;display:inline-block}
+      .tlw-dot-lang{background:#4a7fb5}.tlw-dot-vis{background:#3f9f72}.tlw-dot-rob{background:#d98032}
+      .tlw-toggle{color:var(--blog-muted);display:inline-flex;align-items:center;gap:.4rem}
+      .tlw-toggle select{font:inherit;color:var(--blog-text);background:var(--blog-bg);border:1px solid var(--blog-border);border-radius:5px;padding:2px 6px}
+      .tlw-scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:.25rem}
+      .tlw-track{position:relative;height:480px;width:100%;padding:14px 0 34px 54px;box-sizing:border-box}
+      .tlw-plot{position:absolute;left:54px;right:10px;top:14px;bottom:34px}
+      .tlw-grid{position:absolute;left:0;right:0;height:1px;background:var(--blog-border);opacity:.7}
+      .tlw-grid span{position:absolute;left:-54px;top:-.6em;width:48px;text-align:right;color:var(--blog-muted);font-size:.7rem}
+      .tlw-grid.is-na{border-top:1px dashed var(--blog-border);background:none;opacity:1}
+      .tlw-axis{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--blog-border)}
+      .tlw-tick{position:absolute;bottom:-20px;transform:translateX(-50%);color:var(--blog-muted);font-size:.72rem}
+      .tlw-tick::before{content:"";position:absolute;left:50%;bottom:16px;width:1px;height:7px;background:var(--blog-border)}
+      .tlw-ylab{position:absolute;left:2px;top:-2px;color:var(--blog-muted);font-size:.7rem}
+      .tlw-item{position:absolute;transform:translate(-50%,50%);background:none;border:0;padding:0;cursor:pointer;color:inherit;line-height:0}
+      .tlw-label{position:absolute;left:50%;bottom:11px;transform:translateX(-50%);font-size:.7rem;line-height:1.2;white-space:nowrap;color:var(--blog-muted);transition:color .15s;pointer-events:none}
+      .tlw-item.lab-below .tlw-label{bottom:auto;top:11px}
+      .tlw-item.lab-hidden .tlw-label{display:none}
+      .tlw-mark{display:block;width:12px;height:12px;border-radius:50%;border:2px solid var(--blog-bg);transition:transform .15s}
+      .tlw-item[data-area="lang"] .tlw-mark{background:#4a7fb5}
+      .tlw-item[data-area="vis"] .tlw-mark{background:#3f9f72}
+      .tlw-item[data-area="rob"] .tlw-mark{background:#d98032}
+      .tlw-item:hover,.tlw-item.is-active{z-index:3}
+      .tlw-item:hover .tlw-mark,.tlw-item:focus-visible .tlw-mark,.tlw-item.is-active .tlw-mark{transform:scale(1.5)}
+      .tlw-item:hover .tlw-label,.tlw-item:focus-visible .tlw-label,.tlw-item.is-active .tlw-label{display:block;color:var(--blog-text);font-weight:600}
+      .tlw-item:focus-visible{outline:none}
+      .tlw-panel{min-height:138px;border:1px solid var(--blog-border);border-radius:8px;padding:.9rem 1.1rem;background:var(--blog-code-bg)}
+      .tlw-panel h4{margin:0 0 .15rem;font-size:1rem}
+      .tlw-panel .tlw-meta{color:var(--blog-muted);margin:0 0 .55rem;font-size:.8rem}
+      .tlw-panel .tlw-dim{opacity:.75}
+      .tlw-panel p{margin:0 0 .45rem;line-height:1.5}
+      .tlw-panel .tlw-hint{color:var(--blog-muted);margin:0}
+      .tlw-panel a{color:var(--blog-link)}
+      .tlw-note{color:var(--blog-muted);font-size:.78rem;margin:.5rem 0 0}
+      @media (max-width:600px){.tlw-track{height:380px;padding-left:44px}.tlw-plot{left:44px}.tlw-grid span{left:-44px;width:38px}.tlw-label{font-size:.66rem}}
+      </style>
+
+      <script>
+      (function(){
+        var M=1e6,B=1e9;
+        var DATA=[
+          {n:"ResNet",f:"Deep Residual Learning for Image Recognition",d:"2015-12",a:"vis",u:"https://arxiv.org/abs/1512.03385",p:60*M,pm:"ResNet-152; the paper reports FLOPs, not parameters",c:240397,
+           w:"Residual connections let very deep networks train stably.",
+           y:"The skip connection is still inside every transformer block."},
+          {n:"Diffusion (2015)",f:"Deep Unsupervised Learning using Nonequilibrium Thermodynamics",d:"2015-03",a:"vis",u:"https://arxiv.org/abs/1503.03585",p:0,pm:"",c:10792,
+           w:"Destroys data with a slow forward diffusion process, then learns to reverse it step by step.",
+           y:"The original diffusion model. Five years ahead of its time: DDPM is this idea made to work at scale."},
+          {n:"Transformer",f:"Attention Is All You Need",d:"2017-06",a:"lang",u:"https://arxiv.org/abs/1706.03762",p:213*M,pm:"Transformer (big); base is 65M",c:194564,
+           w:"Drops recurrence and convolution entirely: a stack of self-attention and feed-forward layers, trained in parallel across all positions.",
+           y:"The architecture almost every model here is built from. Parallel training is what made scaling to billions of parameters practical."},
+          {n:"BERT",f:"BERT: Pre-training of Deep Bidirectional Transformers",d:"2018-10",a:"lang",u:"https://arxiv.org/abs/1810.04805",p:340*M,pm:"BERT-large",c:121693,
+           w:"Masked-token pretraining with a bidirectional encoder.",
+           y:"Made pretrain-then-finetune the standard for NLP, and still shapes encoder design."},
+          {n:"GPT-2",f:"Language Models are Unsupervised Multitask Learners",d:"2019-02",a:"lang",u:"https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf",p:1542*M,pm:"largest of four sizes",c:30391,
+           w:"A 1.5B-parameter decoder trained only to predict the next word on web text, then evaluated on tasks it never saw in training.",
+           y:"First convincing evidence of zero-shot transfer: translation, summarisation and QA emerge from plain next-token prediction, with no task-specific heads."},
+          {n:"Scaling laws",f:"Scaling Laws for Neural Language Models",d:"2020-01",a:"lang",u:"https://arxiv.org/abs/2001.08361",p:0,pm:"a sweep up to 1.5B non-embedding parameters",c:9151,
+           w:"Loss falls as a power law in parameters, data and compute.",
+           y:"Turned model building into a budgeting problem with predictable returns."},
+          {n:"NeRF",f:"NeRF: Representing Scenes as Neural Radiance Fields",d:"2020-03",a:"vis",u:"https://arxiv.org/abs/2003.08934",p:1.2*M,pm:"per-scene MLP, derived from the paper's “5 MB of weights”",c:5513,
+           w:"Fits a volumetric radiance field to posed images, one small MLP per scene.",
+           y:"Started the neural-field line of work in 3D vision and graphics."},
+          {n:"GPT-3",f:"Language Models are Few-Shot Learners",d:"2020-05",a:"lang",u:"https://arxiv.org/abs/2005.14165",p:175*B,pm:"GPT-3 175B",c:63952,
+           w:"Scales the same recipe to 175B parameters and shows that examples placed in the prompt can replace fine-tuning.",
+           y:"Turned in-context learning into the default interface for using a model, and made scale itself a research agenda."},
+          {n:"DDPM",f:"Denoising Diffusion Probabilistic Models",d:"2020-06",a:"vis",u:"https://arxiv.org/abs/2006.11239",p:114*M,pm:"LSUN / CelebA-HQ 256² U-Net; the CIFAR-10 model is 35.7M",c:35580,
+           w:"Learns to invert a noising process with a U-Net, step by step.",
+           y:"The generative engine behind modern image models, and behind Diffusion Policy."},
+          {n:"ViT",f:"An Image is Worth 16x16 Words",d:"2020-10",a:"vis",u:"https://arxiv.org/abs/2010.11929",p:632*M,pm:"ViT-H/14; ViT-L is 307M",c:70540,
+           w:"Cuts an image into 16x16 patches, treats them as tokens, and feeds them to a plain transformer with no convolutions.",
+           y:"Gave vision the same scalable architecture as language, so image models could ride the same data and compute curves."},
+          {n:"CLIP",f:"Learning Transferable Visual Models From Natural Language Supervision",d:"2021-02",a:"vis",u:"https://arxiv.org/abs/2103.00020",p:428*M,pm:"ViT-L/14, from the released weights; the paper gives no total",c:56475,
+           w:"Contrastively matches 400M image-text pairs scraped from the web, learning one shared embedding space for pictures and captions.",
+           y:"Large-scale visual pretraining without human labels. Open-vocabulary recognition, and the encoder that text-to-image models and VLMs were built on."},
+          {n:"MAE",f:"Masked Autoencoders Are Scalable Vision Learners",d:"2021-11",a:"vis",u:"https://arxiv.org/abs/2111.06377",p:632*M,pm:"ViT-H",c:12954,
+           w:"Masks most patches and reconstructs them.",
+           y:"Label-free pretraining for ViTs, the visual counterpart of masked language modelling."},
+          {n:"Latent Diffusion",f:"High-Resolution Image Synthesis with Latent Diffusion Models",d:"2021-12",a:"vis",u:"https://arxiv.org/abs/2112.10752",p:1.45*B,pm:"text-to-image LDM",c:27690,
+           w:"Runs diffusion in a compressed latent space instead of pixel space.",
+           y:"Made high-resolution text-to-image cheap enough to run anywhere; Stable Diffusion."},
+          {n:"Chain of thought",f:"Chain-of-Thought Prompting Elicits Reasoning",d:"2022-01",a:"lang",u:"https://arxiv.org/abs/2201.11903",p:0,pm:"prompting only; largest model studied is PaLM 540B",c:22335,
+           w:"Prompts the model to write intermediate steps before answering.",
+           y:"Opened the line of work on inference-time reasoning."},
+          {n:"InstructGPT",f:"Training language models to follow instructions with human feedback",d:"2022-03",a:"lang",u:"https://arxiv.org/abs/2203.02155",p:175*B,pm:"InstructGPT 175B; the headline result is a 1.3B model beating 175B GPT-3",c:24481,
+           w:"Supervised fine-tuning plus reinforcement learning from human preferences.",
+           y:"The alignment recipe that made raw LMs usable as assistants."},
+          {n:"Chinchilla",f:"Training Compute-Optimal Large Language Models",d:"2022-03",a:"lang",u:"https://arxiv.org/abs/2203.15556",p:70*B,pm:"Chinchilla",c:3810,
+           w:"Shows most large models were badly under-trained on data.",
+           y:"Rebalanced the field from parameter count toward token count."},
+          {n:"PaLM",f:"PaLM: Scaling Language Modeling with Pathways",d:"2022-04",a:"lang",u:"https://arxiv.org/abs/2204.02311",p:540*B,pm:"PaLM 540B",c:8424,
+           w:"A 540B dense model trained across thousands of accelerators with the Pathways system.",
+           y:"Pushed dense scaling about as far as it went, and reported sharp jumps on reasoning benchmarks that motivated work on emergent abilities."},
+          {n:"SayCan",f:"Do As I Can, Not As I Say",d:"2022-04",a:"rob",u:"https://arxiv.org/abs/2204.01691",p:0,pm:"uses a frozen PaLM 540B as the planner",c:3809,
+           w:"Grounds an LLM's plans in learned affordances of the robot's real skills.",
+           y:"Early bridge from language models to long-horizon robot behaviour."},
+          {n:"RT-1",f:"RT-1: Robotics Transformer for Real-World Control at Scale",d:"2022-12",a:"rob",u:"https://arxiv.org/abs/2212.06817",p:35*M,pm:"RT-1",c:2908,
+           w:"Tokenizes robot actions and trains a transformer on 130k teleoperated demonstrations covering hundreds of tasks.",
+           y:"Showed that the data-and-transformer recipe transfers to real manipulation, and that performance keeps improving with more robot data."},
+          {n:"LLaMA",f:"LLaMA: Open and Efficient Foundation Language Models",d:"2023-02",a:"lang",u:"https://arxiv.org/abs/2302.13971",p:65*B,pm:"LLaMA-65B",c:21753,
+           w:"Strong models trained on public data, with weights released to researchers.",
+           y:"Set off the open-weight ecosystem most academic work now builds on."},
+          {n:"Diffusion Policy",f:"Diffusion Policy: Visuomotor Policy Learning via Action Diffusion",d:"2023-03",a:"rob",u:"https://arxiv.org/abs/2303.04137",p:278*M,pm:"CNN-based configuration; sizes are reported per task, not as one headline",c:4434,
+           w:"Generates an action sequence by denoising, rather than regressing a single action per step.",
+           y:"Handles multimodal demonstrations, where several different motions are all correct, and quickly became the baseline for visuomotor manipulation."},
+          {n:"SigLIP",f:"Sigmoid Loss for Language Image Pre-Training",d:"2023-03",a:"vis",u:"https://arxiv.org/abs/2303.15343",p:400*M,pm:"SigLIP-So400m vision tower, added in a later version",c:3917,
+           w:"Replaces CLIP's softmax contrastive loss with a pairwise sigmoid loss that needs no global normalisation over the batch.",
+           y:"Trains well without huge batches, so strong image-text encoders became much cheaper. Now a common vision tower in open VLMs."},
+          {n:"ACT / ALOHA",f:"Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware",d:"2023-04",a:"rob",u:"https://arxiv.org/abs/2304.13705",p:80*M,pm:"ACT",c:2503,
+           w:"Action-chunking transformer trained on cheap bimanual teleoperation hardware.",
+           y:"Made dexterous imitation learning reproducible in ordinary labs."},
+          {n:"DINOv2",f:"DINOv2: Learning Robust Visual Features without Supervision",d:"2023-04",a:"vis",u:"https://arxiv.org/abs/2304.07193",p:1.1*B,pm:"ViT-g/14",c:10789,
+           w:"Self-distillation at scale on curated image data.",
+           y:"General visual features that work without fine-tuning, including for dense tasks."},
+          {n:"SAM",f:"Segment Anything",d:"2023-04",a:"vis",u:"https://arxiv.org/abs/2304.02643",p:636*M,pm:"ViT-H image encoder; not stated in the paper",c:15845,
+           w:"Promptable segmentation trained on a billion masks.",
+           y:"A foundation model for a classic dense task, plus a data engine recipe."},
+          {n:"RT-2",f:"RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",d:"2023-07",a:"rob",u:"https://arxiv.org/abs/2307.15818",p:55*B,pm:"RT-2-PaLI-X-55B",c:4432,
+           w:"Fine-tunes a pretrained vision-language model to emit actions as text tokens, co-trained on web data and robot data.",
+           y:"The vision-language-action template: semantic knowledge from the web shows up as better generalisation on the robot."},
+          {n:"3D Gaussian Splatting",f:"3D Gaussian Splatting for Real-Time Radiance Field Rendering",d:"2023-08",a:"vis",u:"https://arxiv.org/abs/2308.04079",p:0,pm:"an explicit scene of millions of Gaussians, not a trained network",c:10562,
+           w:"Represents a scene as millions of anisotropic 3D Gaussians and rasterises them with a differentiable splatting pass.",
+           y:"Matched NeRF quality at real-time rates, and moved 3D reconstruction back toward explicit, editable representations."},
+          {n:"Open X-Embodiment",f:"Open X-Embodiment: Robotic Learning Datasets and RT-X Models",d:"2023-10",a:"rob",u:"https://arxiv.org/abs/2310.08864",p:55*B,pm:"RT-2-X; the dataset, not the model, is the contribution",c:1203,
+           w:"Pools demonstrations from many labs and robot bodies into one dataset, then trains RT-X models on it.",
+           y:"Cross-embodiment training: one policy improves by learning from other robots."},
+          {n:"Octo",f:"Octo: An Open-Source Generalist Robot Policy",d:"2024-05",a:"rob",u:"https://arxiv.org/abs/2405.12213",p:93*M,pm:"Octo-Base",c:1934,
+           w:"Open generalist policy, easy to fine-tune to new robots.",
+           y:"Made generalist manipulation policies accessible outside big industry labs."},
+          {n:"OpenVLA",f:"OpenVLA: An Open-Source Vision-Language-Action Model",d:"2024-06",a:"rob",u:"https://arxiv.org/abs/2406.09246",p:7*B,pm:"OpenVLA 7B",c:3626,
+           w:"Open 7B vision-language-action model trained on Open X-Embodiment data.",
+           y:"Put the RT-2 recipe in the open, with efficient fine-tuning."},
+          {n:"pi-0",f:"A Vision-Language-Action Flow Model for General Robot Control",d:"2024-10",a:"rob",u:"https://arxiv.org/abs/2410.24164",p:3.3*B,pm:"3B VLM plus a 300M action expert",c:2885,
+           w:"A VLA with a flow-matching action head for high-frequency continuous control.",
+           y:"Pushes VLAs from discrete tokens toward smooth dexterous motion."},
+          {n:"DeepSeek-R1",f:"DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via RL",d:"2025-01",a:"lang",u:"https://arxiv.org/abs/2501.12948",p:671*B,pm:"671B total, 37B active per token (MoE)",c:5771,
+           w:"Reinforcement learning on verifiable rewards grows long reasoning traces.",
+           y:"Showed reasoning behaviour can be trained, not just prompted, with open weights."}
+        ];
+        var AREA={lang:"Language",vis:"Vision",rob:"Robotics"};
+        var AXES={
+          p:{key:"p",name:"params",decades:[6,7,8,9,10,11,12],na:5.4,
+             grid:function(e){return e>=12?"1T":e>=9?Math.pow(10,e-9)+"B":Math.pow(10,e-6)+"M";},
+             fmt:function(v){return v>=1e9?(v/1e9).toFixed(v>=1e10?0:1).replace(/\.0$/,"")+"B parameters":Math.round(v/1e6)+"M parameters";},
+             none:"no single model size"},
+          c:{key:"c",name:"citations",decades:[2,3,4,5,6],na:1.4,
+             grid:function(e){return e>=6?"1M":e>=3?Math.pow(10,e-3)+"k":"100";},
+             fmt:function(v){return v.toLocaleString("en-US")+" citations";},
+             none:"citation count unavailable"}
+        };
+        var track=document.getElementById("tlw-track");
+        var panel=document.getElementById("tlw-panel");
+        var sel=document.getElementById("tlw-yaxis");
+        if(!track||!panel||!sel)return;
+        function t(d){var p=d.split("-");return parseInt(p[0],10)+(parseInt(p[1],10)-1)/12;}
+        function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+        var pinned=null;
+        function show(it){
+          var ax=AXES[sel.value],v=it[ax.key];
+          panel.innerHTML='<h4><a href="'+it.u+'" target="_blank" rel="noopener">'+esc(it.f)+'</a></h4>'+
+            '<p class="tlw-meta">'+esc(it.n)+' &middot; '+AREA[it.a]+' &middot; '+it.d.replace("-","/")+
+            ' &middot; '+esc(v?ax.fmt(v):ax.none)+(it.pm?' <span class="tlw-dim">('+esc(it.pm)+')</span>':'')+'</p>'+
+            '<p><b>What it does.</b> '+esc(it.w)+'</p>'+
+            '<p><b>Why it matters.</b> '+esc(it.y)+'</p>';
+        }
+        function render(){
+          var ax=AXES[sel.value];
+          var items=DATA.slice().sort(function(a,b){return t(a.d)-t(b.d);});
+          var lo=Math.floor(t(items[0].d))-0.3, hi=Math.ceil(t(items[items.length-1].d))+0.3;
+          var yLo=ax.na-0.45, yHi=ax.decades[ax.decades.length-1]+0.35;
+          function py(v){var q=v?Math.log(v)/Math.LN10:ax.na;return(Math.min(Math.max(q,yLo),yHi)-yLo)/(yHi-yLo)*100;}
+          track.innerHTML='<div class="tlw-ylab">'+ax.name+'</div><div class="tlw-plot" id="tlw-plot"></div>';
+          var plot=document.getElementById("tlw-plot");
+          plot.innerHTML='<div class="tlw-axis"></div>';
+          ax.decades.concat([ax.na]).forEach(function(e){
+            var g=document.createElement("div");
+            g.className="tlw-grid"+(e===ax.na?" is-na":"");
+            g.style.bottom=((e-yLo)/(yHi-yLo)*100)+"%";
+            g.innerHTML='<span>'+(e===ax.na?"n/a":ax.grid(e))+'</span>';
+            plot.appendChild(g);
+          });
+          for(var y=Math.ceil(lo);y<=Math.floor(hi);y++){
+            var tick=document.createElement("div");
+            tick.className="tlw-tick";tick.style.left=((y-lo)/(hi-lo)*100)+"%";tick.textContent=y;
+            plot.appendChild(tick);
+          }
+          var placed=[];
+          items.forEach(function(it){
+            var x=(t(it.d)-lo)/(hi-lo)*100, yy=py(it[ax.key]);
+            var b=document.createElement("button");
+            b.type="button";b.className="tlw-item";b.setAttribute("data-area",it.a);
+            b.style.left=x+"%";b.style.bottom=yy+"%";
+            var near=placed.filter(function(q){return Math.abs(q.x-x)<11&&Math.abs(q.y-yy)<9;});
+            if(near.length>2)b.className+=" lab-hidden";        // too crowded: label on hover only
+            else if(near.length>0)b.className+=" lab-below";    // flip under the dot
+            placed.push({x:x,y:yy});
+            b.innerHTML='<span class="tlw-label">'+esc(it.n)+'</span><span class="tlw-mark"></span>';
+            b.addEventListener("mouseenter",function(){if(!pinned)show(it);});
+            b.addEventListener("focus",function(){if(!pinned)show(it);});
+            b.addEventListener("click",function(){
+              var was=pinned===it;
+              Array.prototype.forEach.call(plot.querySelectorAll(".tlw-item"),function(e){e.classList.remove("is-active");});
+              pinned=was?null:it; if(!was){b.classList.add("is-active");}
+              show(it);
+            });
+            plot.appendChild(b);
+          });
+        }
+        sel.addEventListener("change",function(){pinned=null;render();});
+        render();
+      })();
+      </script>
+
+      <p class="tlw-note">Model sizes are the flagship model of each paper; several papers never state a count, and those are marked in the panel. Citation counts come from Semantic Scholar and are a snapshot, not a live figure; NeRF is split across several records there, so its number is an undercount.</p>
+
+      <h2>Language</h2>
+      <ul>
+      <li><strong><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a></strong> (2017) — the transformer architecture.</li>
+      <li><strong><a href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf">GPT-2</a></strong> (2019) and <strong><a href="https://arxiv.org/abs/2005.14165">GPT-3</a></strong> (2020) — zero-shot and then in-context learning out of plain next-token pretraining.</li>
+      <li><strong><a href="https://arxiv.org/abs/2204.02311">PaLM</a></strong> (2022) — dense scaling to 540B, and the reasoning jumps that came with it.</li>
+      <li>Also on the plot: <a href="https://arxiv.org/abs/1810.04805">BERT</a>, <a href="https://arxiv.org/abs/2001.08361">scaling laws</a>, <a href="https://arxiv.org/abs/2203.15556">Chinchilla</a>, <a href="https://arxiv.org/abs/2201.11903">chain-of-thought</a>, <a href="https://arxiv.org/abs/2203.02155">InstructGPT</a>, <a href="https://arxiv.org/abs/2302.13971">LLaMA</a>, <a href="https://arxiv.org/abs/2501.12948">DeepSeek-R1</a>.</li>
+      </ul>
+      <h2>Vision</h2>
+      <ul>
+      <li><strong><a href="https://arxiv.org/abs/2010.11929">ViT</a></strong> (2020) — an image as a sequence of patches, which let vision models scale like language models.</li>
+      <li><strong><a href="https://arxiv.org/abs/2103.00020">CLIP</a></strong> (2021) and <strong><a href="https://arxiv.org/abs/2303.15343">SigLIP</a></strong> (2023) — large-scale visual pretraining supervised by text found on the web rather than by human labels.</li>
+      <li>Also on the plot: <a href="https://arxiv.org/abs/1512.03385">ResNet</a>, <a href="https://arxiv.org/abs/2111.06377">MAE</a>, <a href="https://arxiv.org/abs/2304.07193">DINOv2</a>, <a href="https://arxiv.org/abs/2304.02643">SAM</a>.</li>
+      </ul>
+      <h2>Generative models and 3D</h2>
+      <ul>
+      <li><strong><a href="https://arxiv.org/abs/1503.03585">Deep Unsupervised Learning using Nonequilibrium Thermodynamics</a></strong> (2015) — diffusion, five years before it worked at scale — and <strong><a href="https://arxiv.org/abs/2006.11239">DDPM</a></strong> (2020), which made it work. <a href="https://arxiv.org/abs/2112.10752">Latent diffusion</a> (2021) moved it into a compressed space and made it cheap.</li>
+      <li><strong><a href="https://arxiv.org/abs/2003.08934">NeRF</a></strong> (2020) and <strong><a href="https://arxiv.org/abs/2308.04079">3D Gaussian Splatting</a></strong> (2023) — implicit neural fields, then explicit primitives that render in real time.</li>
+      </ul>
+      <h2>Robotics</h2>
+      <ul>
+      <li><strong><a href="https://arxiv.org/abs/2212.06817">RT-1</a></strong> (2022) and <strong><a href="https://arxiv.org/abs/2307.15818">RT-2</a></strong> (2023) — robot transformers, then vision-language-action models that inherit web knowledge.</li>
+      <li><strong><a href="https://arxiv.org/abs/2303.04137">Diffusion Policy</a></strong> (2023) — generating action sequences by denoising, which copes with multimodal demonstrations.</li>
+      <li>Also on the plot: <a href="https://arxiv.org/abs/2204.01691">SayCan</a>, <a href="https://arxiv.org/abs/2304.13705">ACT / ALOHA</a>, <a href="https://arxiv.org/abs/2310.08864">Open X-Embodiment</a>, <a href="https://arxiv.org/abs/2405.12213">Octo</a>, <a href="https://arxiv.org/abs/2406.09246">OpenVLA</a>, <a href="https://arxiv.org/abs/2410.24164">pi-0</a>.</li>
+      </ul>
+    </div>
+  </article>
+
+  <footer class="d-footer">
+    <a href="../../blog.html">Back to all posts</a>
+  </footer>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false },
+            { left: "\\(", right: "\\)", display: false },
+            { left: "\\[", right: "\\]", display: true },
+          ],
+          throwOnError: false,
+        });
+      }
+    });
+  </script>
+</body>
+</html>
