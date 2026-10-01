@@ -9,9 +9,9 @@
 //   4. paste them below; comments appear once both are filled in
 var GISCUS = {
   repo: 'li-zhehao/li-zhehao.github.io',
-  repoId: '',            // data-repo-id from giscus.app
+  repoId: 'R_kgDOJogcKA',
   category: 'Announcements',
-  categoryId: '',        // data-category-id from giscus.app
+  categoryId: 'DIC_kwDOJogcKM4DG1BQ',
 };
 
 (function () {
