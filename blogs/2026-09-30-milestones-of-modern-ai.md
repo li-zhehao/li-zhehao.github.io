@@ -111,6 +111,9 @@ A hall of fame of seminal papers that shaped the modern AI landscape; a personal
     {n:"DDPM",f:"Denoising Diffusion Probabilistic Models",d:"2020-06",a:"vis",u:"https://arxiv.org/abs/2006.11239",g:"ddpm.jpg",p:114*M,pm:"LSUN / CelebA-HQ 256² U-Net; the CIFAR-10 model is 35.7M",c:35580,
      w:"Learns to invert a noising process with a U-Net, step by step.",
      y:"The generative engine behind modern image models, and behind Diffusion Policy."},
+    {n:"Score SDE",f:"Score-Based Generative Modeling through Stochastic Differential Equations",d:"2020-11",a:"vis",u:"https://arxiv.org/abs/2011.13456",g:"score-sde.jpg",p:0,pm:"ICLR 2021 outstanding paper; no single headline model size",c:12282,
+     w:"Casts noising and denoising as a pair of stochastic differential equations, with one continuous-time framework covering score matching and diffusion, plus a deterministic probability-flow ODE with the same marginals.",
+     y:"The theory under modern diffusion models: it explains why they work, and the ODE view is what made fast samplers and exact likelihoods possible."},
     {n:"ViT",f:"An Image is Worth 16x16 Words",d:"2020-10",a:"vis",u:"https://arxiv.org/abs/2010.11929",g:"vit.jpg",p:632*M,pm:"ViT-H/14; ViT-L is 307M",c:70540,
      w:"Cuts an image into 16x16 patches, treats them as tokens, and feeds them to a plain transformer with no convolutions.",
      y:"Gave vision the same scalable architecture as language, so image models could ride the same data and compute curves."},
@@ -380,7 +383,7 @@ A hall of fame of seminal papers that shaped the modern AI landscape; a personal
 
 ## Generative models and 3D
 
-- **[Deep Unsupervised Learning using Nonequilibrium Thermodynamics](https://arxiv.org/abs/1503.03585)** (2015) — diffusion, five years before it worked at scale — and **[DDPM](https://arxiv.org/abs/2006.11239)** (2020), which made it work. [Latent diffusion](https://arxiv.org/abs/2112.10752) (2021) moved it into a compressed space and made it cheap.
+- **[Deep Unsupervised Learning using Nonequilibrium Thermodynamics](https://arxiv.org/abs/1503.03585)** (2015) — diffusion, five years before it worked at scale — and **[DDPM](https://arxiv.org/abs/2006.11239)** (2020), which made it work. **[Score-based generative modeling through SDEs](https://arxiv.org/abs/2011.13456)** (2020) then put both under one continuous-time theory, and [latent diffusion](https://arxiv.org/abs/2112.10752) (2021) moved it into a compressed space and made it cheap.
 - **[NeRF](https://arxiv.org/abs/2003.08934)** (2020) and **[3D Gaussian Splatting](https://arxiv.org/abs/2308.04079)** (2023) — implicit neural fields, then explicit primitives that render in real time.
 
 ## Robotics
