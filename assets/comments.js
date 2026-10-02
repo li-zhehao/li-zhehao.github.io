@@ -46,8 +46,8 @@ var GISCUS = {
     inputposition: 'top',
     theme: theme(),
     lang: 'en',
-    loading: 'lazy',
   };
+  s.onerror = function () { console.error('giscus: client.js failed to load'); };
   Object.keys(attrs).forEach(function (k) { s.setAttribute('data-' + k, attrs[k]); });
   mount.appendChild(s);
 

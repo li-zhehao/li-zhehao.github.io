@@ -8,7 +8,8 @@
   function fill(el) {
     var path = el.getAttribute('data-reads');
     if (!path) return;
-    fetch(API + encodeURIComponent(path) + '.json')
+    // the path goes in as one encoded segment: /counter/%2Fblogs%2F...%2F.json
+    fetch(API + '/' + encodeURIComponent(path) + '.json')
       .then(function (r) {
         if (r.status === 404) return { count: '0' };   // no pageviews recorded yet
         return r.ok ? r.json() : null;

@@ -165,7 +165,7 @@ def render_article(
   <!-- GoatCounter: privacy-friendly page counts, no cookies -->
   <script data-goatcounter="https://zhehaoli.goatcounter.com/count"
     async src="//gc.zgo.at/count.js"></script>
-  <script src="{asset_root}assets/reads.js?v=2"></script>
+  <script src="{asset_root}assets/reads.js?v=3"></script>
   <script src="https://kit.fontawesome.com/13cb060381.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.10.0/styles/github.min.css">
@@ -208,7 +208,7 @@ def render_article(
     <a href="{asset_root}blog.html">Back to all posts</a>
   </footer>
 
-  <script src="{asset_root}assets/comments.js?v=2"></script>
+  <script src="{asset_root}assets/comments.js?v=3"></script>
 
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
