@@ -248,8 +248,7 @@ def render_blog_list_item(post: dict) -> str:
           <p>
             {html.escape(post['abstract'])}
             <br>
-            <span style="color: #ED7D31">{html.escape(post['date'])}</span>
-            <span class="tag reads" data-reads="/blogs/{html.escape(post['slug'])}/" hidden></span>{tag_html}
+            <span style="color: #ED7D31">{html.escape(post['date'])}</span>{tag_html}
           </p>
         </div>
       </div>"""

@@ -43,8 +43,8 @@
       </div>
     </header>
     <div class="d-body">
-      <p>A hall of fame of seminal papers that shaped the modern AI landscape; a personal running list. Time runs left to right; the y axis is either the size of each paper's flagship model or how often the paper has been cited, both on a logarithmic scale. Blue is language models, green is vision, orange is robotics. <strong>Hover a dot</strong> (or tap it on a phone) to see what the paper did and why it mattered; click to pin it.</p>
-      <div class="tlw" id="ai-timeline"><div class="tlw-head"><div class="tlw-legend"><span class="tlw-key"><i class="tlw-dot-lang"></i>Language Model</span><span class="tlw-key"><i class="tlw-dot-vis"></i>Vision</span><span class="tlw-key"><i class="tlw-dot-rob"></i>Robotics</span></div><label class="tlw-toggle">y axis: <select id="tlw-yaxis"><option value="p">model size</option><option value="c">citations</option></select></label></div><div class="tlw-scroll"><div class="tlw-track" id="tlw-track"></div></div><div class="tlw-panel" id="tlw-panel"><p class="tlw-hint">Hover or tap a dot to read about the paper.</p></div></div>
+      <p>A hall of fame of seminal papers that shaped the modern AI landscape; a personal running list. Time runs left to right; the y axis is either the size of each paper's flagship model or how often the paper has been cited, both on a logarithmic scale. Blue is language models, green is vision, orange is robotics, purple is the training and systems work underneath all three. <strong>Hover a dot</strong> (or tap it on a phone) to see what the paper did and why it mattered; click to pin it.</p>
+      <div class="tlw" id="ai-timeline"><div class="tlw-head"><div class="tlw-legend"><span class="tlw-key"><i class="tlw-dot-lang"></i>Language Model</span><span class="tlw-key"><i class="tlw-dot-vis"></i>Vision</span><span class="tlw-key"><i class="tlw-dot-rob"></i>Robotics</span><span class="tlw-key"><i class="tlw-dot-core"></i>Training &amp; Systems</span></div><label class="tlw-toggle">y axis: <select id="tlw-yaxis"><option value="p">model size</option><option value="c">citations</option></select></label></div><div class="tlw-scroll"><div class="tlw-track" id="tlw-track"></div></div><div class="tlw-panel" id="tlw-panel"><p class="tlw-hint">Hover or tap a dot to read about the paper.</p></div></div>
 
       <style>
       /* the plot breaks out of the 720px text column so it fits without sideways scrolling */
@@ -53,7 +53,7 @@
       .tlw-legend{display:flex;flex-wrap:wrap;gap:.75rem}
       .tlw-key{display:inline-flex;align-items:center;gap:.35rem;color:var(--blog-muted)}
       .tlw-key i{width:10px;height:10px;border-radius:50%;display:inline-block}
-      .tlw-dot-lang{background:#4a7fb5}.tlw-dot-vis{background:#3f9f72}.tlw-dot-rob{background:#d98032}
+      .tlw-dot-lang{background:#4a7fb5}.tlw-dot-vis{background:#3f9f72}.tlw-dot-rob{background:#d98032}.tlw-dot-core{background:#8f6fb5}
       .tlw-toggle{color:var(--blog-muted);display:inline-flex;align-items:center;gap:.4rem}
       .tlw-toggle select{font:inherit;color:var(--blog-text);background:var(--blog-bg);border:1px solid var(--blog-border);border-radius:5px;padding:2px 6px}
       .tlw-scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:.25rem}
@@ -72,6 +72,7 @@
       .tlw-item[data-area="lang"] .tlw-mark{background:#4a7fb5}
       .tlw-item[data-area="vis"] .tlw-mark{background:#3f9f72}
       .tlw-item[data-area="rob"] .tlw-mark{background:#d98032}
+      .tlw-item[data-area="core"] .tlw-mark{background:#8f6fb5}
       .tlw-item:hover,.tlw-item.is-active{z-index:4}
       .tlw-item:hover .tlw-mark,.tlw-item:focus-visible .tlw-mark,.tlw-item.is-active .tlw-mark{transform:scale(1.5)}
       .tlw-item:focus-visible{outline:none}
@@ -122,6 +123,9 @@
           {n:"ResNet",f:"Deep Residual Learning for Image Recognition",d:"2015-12",a:"vis",u:"https://arxiv.org/abs/1512.03385",g:"resnet.jpg",p:60*M,pm:"ResNet-152; the paper reports FLOPs, not parameters",c:240397,
            w:"Residual connections let very deep networks train stably.",
            y:"The skip connection is still inside every transformer block."},
+          {n:"Adam",f:"Adam: A Method for Stochastic Optimization",d:"2014-12",a:"core",u:"https://arxiv.org/abs/1412.6980",g:"adam.jpg",p:0,pm:"an optimizer, not a model",c:171697,
+           w:"Adapts a per-parameter step size from running estimates of the gradient's first and second moments, with bias correction, so it works with little or no tuning.",
+           y:"The default optimizer for almost everything here. Nearly every model on this plot was trained with Adam or its variants."},
           {n:"VAE",f:"Auto-Encoding Variational Bayes",d:"2013-12",a:"vis",u:"https://arxiv.org/abs/1312.6114",g:"vae.jpg",p:0,pm:"small MLP encoders and decoders; no headline size",c:17337,
            w:"Trains a latent-variable model by optimising a variational bound, with the reparameterisation trick making the sampling step differentiable so the encoder and decoder train by ordinary backpropagation.",
            y:"Made deep generative modelling practical and gave the field its latent-space vocabulary; latent diffusion still generates inside a VAE's latent space."},
@@ -173,7 +177,7 @@
           {n:"Chinchilla",f:"Training Compute-Optimal Large Language Models",d:"2022-03",a:"lang",u:"https://arxiv.org/abs/2203.15556",g:"chinchilla.jpg",p:70*B,pm:"Chinchilla",c:3810,
            w:"Shows most large models were badly under-trained on data.",
            y:"Rebalanced the field from parameter count toward token count."},
-          {n:"FlashAttention",f:"FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",d:"2022-05",a:"lang",u:"https://arxiv.org/abs/2205.14135",g:"flashattention.jpg",p:0,pm:"an attention kernel, not a model",c:5422,
+          {n:"FlashAttention",f:"FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",d:"2022-05",a:"core",u:"https://arxiv.org/abs/2205.14135",g:"flashattention.jpg",p:0,pm:"an attention kernel, not a model",c:5422,
            w:"Reorders the attention computation to keep tiles in fast on-chip SRAM, so it never materialises the full attention matrix in memory. Exact, not approximate.",
            y:"Made long contexts affordable, and turned hardware-aware kernel design into a first-class part of model research."},
           {n:"PaLM",f:"PaLM: Scaling Language Modeling with Pathways",d:"2022-04",a:"lang",u:"https://arxiv.org/abs/2204.02311",g:"palm.jpg",p:540*B,pm:"PaLM 540B",c:8424,
@@ -228,7 +232,7 @@
            w:"Reinforcement learning on verifiable rewards grows long reasoning traces.",
            y:"Showed reasoning behaviour can be trained, not just prompted, with open weights."}
         ];
-        var AREA={lang:"Language Model",vis:"Vision",rob:"Robotics"};
+        var AREA={lang:"Language Model",vis:"Vision",rob:"Robotics",core:"Training & Systems"};
         var AXES={
           p:{key:"p",name:"params",decades:[6,7,8,9,10,11,12],na:5.4,
              grid:function(e){return e>=12?"1T":e>=9?Math.pow(10,e-9)+"B":Math.pow(10,e-6)+"M";},
@@ -246,7 +250,7 @@
         function t(d){var p=d.split("-");return parseInt(p[0],10)+(parseInt(p[1],10)-1)/12;}
         function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
         var pinned=null;
-        var COLOR={lang:"#4a7fb5",vis:"#3f9f72",rob:"#d98032"};
+        var COLOR={lang:"#4a7fb5",vis:"#3f9f72",rob:"#d98032",core:"#8f6fb5"};
 
         // ---------- floating card, shown next to the pointer ----------
         var peek=document.createElement("div");
@@ -410,8 +414,13 @@
       <li><strong><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a></strong> (2017) — the transformer architecture.</li>
       <li><strong><a href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf">GPT-2</a></strong> (2019) and <strong><a href="https://arxiv.org/abs/2005.14165">GPT-3</a></strong> (2020) — zero-shot and then in-context learning out of plain next-token pretraining.</li>
       <li><strong><a href="https://arxiv.org/abs/2204.02311">PaLM</a></strong> (2022) — dense scaling to 540B, and the reasoning jumps that came with it.</li>
-      <li><strong><a href="https://arxiv.org/abs/2205.14135">FlashAttention</a></strong> (2022) and <strong><a href="https://arxiv.org/abs/2312.00752">Mamba</a></strong> (2023) — making attention cheap by respecting the memory hierarchy, then questioning whether attention is needed at all.</li>
+      <li><strong><a href="https://arxiv.org/abs/2312.00752">Mamba</a></strong> (2023) — a state space model that scales linearly in sequence length, questioning whether attention is needed at all.</li>
       <li>Also on the plot: <a href="https://arxiv.org/abs/1810.04805">BERT</a>, <a href="https://arxiv.org/abs/2001.08361">scaling laws</a>, <a href="https://arxiv.org/abs/2203.15556">Chinchilla</a>, <a href="https://arxiv.org/abs/2201.11903">chain-of-thought</a>, <a href="https://arxiv.org/abs/2203.02155">InstructGPT</a>, <a href="https://arxiv.org/abs/2302.13971">LLaMA</a>, <a href="https://arxiv.org/abs/2501.12948">DeepSeek-R1</a>.</li>
+      </ul>
+      <h2>Training and systems</h2>
+      <ul>
+      <li><strong><a href="https://arxiv.org/abs/1412.6980">Adam</a></strong> (2014) — the optimizer nearly everything else on this plot was trained with.</li>
+      <li><strong><a href="https://arxiv.org/abs/2205.14135">FlashAttention</a></strong> (2022) — making attention cheap by respecting the memory hierarchy, which is what made long contexts affordable.</li>
       </ul>
       <h2>Vision</h2>
       <ul>

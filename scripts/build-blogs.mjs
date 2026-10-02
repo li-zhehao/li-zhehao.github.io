@@ -212,8 +212,7 @@ function renderBlogListItem(post) {
           <p>
             ${escapeHtml(post.abstract)}
             <br>
-            <span style="color: #ED7D31">${escapeHtml(post.date)}</span>
-            <span class="tag reads" data-reads="/blogs/${escapeHtml(post.slug)}/" hidden></span>${tagHtml}
+            <span style="color: #ED7D31">${escapeHtml(post.date)}</span>${tagHtml}
           </p>
         </div>
       </div>`;
