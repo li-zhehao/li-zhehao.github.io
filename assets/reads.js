@@ -9,7 +9,10 @@
     var path = el.getAttribute('data-reads');
     if (!path) return;
     fetch(API + encodeURIComponent(path) + '.json')
-      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (r) {
+        if (r.status === 404) return { count: '0' };   // no pageviews recorded yet
+        return r.ok ? r.json() : null;
+      })
       .then(function (d) {
         if (!d || d.count === undefined) return;
         var n = String(d.count).trim();
