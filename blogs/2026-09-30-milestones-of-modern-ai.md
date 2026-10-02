@@ -87,6 +87,9 @@ A hall of fame of seminal papers that shaped the modern AI landscape; a personal
     {n:"ResNet",f:"Deep Residual Learning for Image Recognition",d:"2015-12",a:"vis",u:"https://arxiv.org/abs/1512.03385",g:"resnet.jpg",p:60*M,pm:"ResNet-152; the paper reports FLOPs, not parameters",c:240397,
      w:"Residual connections let very deep networks train stably.",
      y:"The skip connection is still inside every transformer block."},
+    {n:"VAE",f:"Auto-Encoding Variational Bayes",d:"2013-12",a:"vis",u:"https://arxiv.org/abs/1312.6114",g:"vae.jpg",p:0,pm:"small MLP encoders and decoders; no headline size",c:17337,
+     w:"Trains a latent-variable model by optimising a variational bound, with the reparameterisation trick making the sampling step differentiable so the encoder and decoder train by ordinary backpropagation.",
+     y:"Made deep generative modelling practical and gave the field its latent-space vocabulary; latent diffusion still generates inside a VAE's latent space."},
     {n:"Diffusion (2015)",f:"Deep Unsupervised Learning using Nonequilibrium Thermodynamics",d:"2015-03",a:"vis",u:"https://arxiv.org/abs/1503.03585",g:"diffusion-2015.jpg",p:0,pm:"",c:10792,
      w:"Destroys data with a slow forward diffusion process, then learns to reverse it step by step.",
      y:"The original diffusion model. Five years ahead of its time: DDPM is this idea made to work at scale."},
@@ -383,6 +386,7 @@ A hall of fame of seminal papers that shaped the modern AI landscape; a personal
 
 ## Generative models and 3D
 
+- **[Auto-Encoding Variational Bayes](https://arxiv.org/abs/1312.6114)** (2013) — the VAE: a differentiable latent-variable model, and the latent space that later methods generate inside.
 - **[Deep Unsupervised Learning using Nonequilibrium Thermodynamics](https://arxiv.org/abs/1503.03585)** (2015) — diffusion, five years before it worked at scale — and **[DDPM](https://arxiv.org/abs/2006.11239)** (2020), which made it work. **[Score-based generative modeling through SDEs](https://arxiv.org/abs/2011.13456)** (2020) then put both under one continuous-time theory, and [latent diffusion](https://arxiv.org/abs/2112.10752) (2021) moved it into a compressed space and made it cheap.
 - **[NeRF](https://arxiv.org/abs/2003.08934)** (2020) and **[3D Gaussian Splatting](https://arxiv.org/abs/2308.04079)** (2023) — implicit neural fields, then explicit primitives that render in real time.
 
